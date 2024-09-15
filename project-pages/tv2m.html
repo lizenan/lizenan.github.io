@@ -1,0 +1,217 @@
+
+
+<!-- 
+  IMPORTANT! 
+  
+  Keep this file unchanged to use as a template for all future project pages. 
+
+  For every new project you add to your portfolio, make a copy of this file in the
+  'project-pages' folder with a name related to the project.
+-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+    <!-- 
+      TODO
+
+      Upload your Unemployable (or whatever photo you like) to the assets/images folder
+      and change the name of the image below to match the uploaded one
+
+      Change the title in the <title> tag to whatever you would like the title of your portfolio to be
+
+      This should be the same across all pages.
+     -->
+     <title>Text-Video-to-Motion</title>
+    <meta name="description" content="A portfolio template for the Unemployables community.">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/typography.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+
+		<script defer src="../js/script.js"></script>
+	</head>
+	<body>
+    <!-- NAVBAR -->
+    <div class="navbar">
+      <a class="nav-title-link" href="../index.html">
+        <!-- 
+          TODO - Change the "Portfolio Title" to whatever you want displayed in the top left
+
+          (this should be the same across all pages)
+         -->
+        <span class="nav-title">Project</span>
+        <!-- 
+          TODO - Change the email after 'mailto:' to your email address for contact 
+        
+          (this should be the same across all pages)
+        -->
+        <a class="button" href="mailto:zenanlicareer@gmail.com">
+          <span class="button-text">Contact Me</span>
+        </a>
+      </a>
+    </div>
+
+    <!-- MAIN PAGE CONTENT -->
+    <div id="main-content">
+
+      <!-- PROJECT HEADER -->
+      <div id="project-header">
+          <!-- 
+            TODO
+
+            - Change the 'main-title' text to the name of your project
+            - Change the 'body-text' text to a short and sweet description of your project (maybe the same as the one on the project card)
+            - Change "desktop.jpeg" to the image filename you uploaded in the assets/images folder.
+          -->
+        <div class="main-title">Text-Video-to-Motion</div>
+        <div class="body-text">multimodal input motion generation</div>
+        <image class="project-header-image" src="../assets/images/tv2m_2.svg">
+      </div>
+
+      <!-- PROJECT DETAILS -->
+      <!-- 
+        TODO
+
+        - Change the 'subheader-text' to whatever header you want for project details
+        - Add paragraphs using the <div class="body-text"></div> elements in the "project-details-content"
+      -->
+      <div id="project-details">
+        <div class="subheader-text">1 Introduction</div>
+        <div class="project-details-content">
+          <div class="body-text">Current research on motion generation primarily focuses on text-based prompts. However, this approach often faces challenges due to limited data availability. Additionally, it can be difficult for users to precisely describe desired motions in text. Leveraging advancements in multimodal models, we can now extract semantic meaning from videos and images more effectively. Our goal is to develop an end-to-end model that enables users to generate motions that align with their limitless imagination.</div>
+        </div>
+        <div class="subheader-text">2 Data Preparation</div>
+        <div class="body-text">Our advanced A3D product can generate motion data from videos, allowing us to create an unlimited number of video-motion paired datasets. Leveraging powerful multimodal large language models (MLLMs), such as VideoChat2, Gemini 1.5, and MPlug2, as well as models with text decoders like Valor, we can produce synthetic text-video-motion pairs. We use similarity metrics between text and video to select relatively "accurate" data. Additionally, our A3D pipeline incorporates multiple mechanisms to assess the quality of the generated motion data, enabling us to choose high-quality video-motion pairs. For more details, please refer to the #data_synthesis project.
+        </div>
+        <div class="subheader-text">3 Encoder selection</div>
+        <div class="body-text">Among the various video-text aligned multimodal models, we selected Valor and InternVideo as the encoders for our experiments.
+        </div>
+        <div class="body-text">The reasons for choosing InternVideo are as follows:
+          <ol>
+            <li>InternVideo aligns on global tokens, which facilitates easier modal alignment during the motion transformer training phase.</li>
+            <li>InternVideo is also trained on images, which can be interpreted as single-frame videos, better aligning with our initial objectives.</li>
+        </ol>
+          
+          
+          The reasons for selecting Valor are:
+          <ol>
+            <li>After testing in our dataset, Valor achieved the best retrieval scores.</li>
+        </ol>
+          
+        </div>
+        <div class="subheader-text">4 Training</div>
+        <div class="body-text">
+          Once we have the synthetic text-video-motion data, we train our model using the following methods:
+          <ol>
+            <li>Masking out text embeddings.</li>
+            <li>Masking out visual embeddings.</li>
+            <li>Using both text and visual embeddings.</li>
+        </ol>
+        We train the model by randomly masking out prompt embeddings within each batch. the ratio of text mask out, video mask out and not masking out are: 0.4, 0.4, 0.2. Strategies 1 and 2 align with our initial goal, where users provide only one type of prompt to generate motion. Strategy 3 aims to enhance generation quality based on Valor's theory. We chose not to use a modality adapter, such as Q-Former in BLIP-2, because our data is synthetic. We suspect that training an adapter on synthetic data might not effectively improve performance in real-world scenarios.
+        </div>
+        <div class="body-text">It is worth mentioning that Valor does not perform one-token alignment but rather aligns entire sequences of tokens (multi-to-multi calculation), maximizing the similarity among all tokens. Consequently, the number of tokens needs to be adjusted accordingly.</div>
+        <div class="subheader-text">5 Ablation study</div>
+        <div class="subsubheader-text">5.1 Connection Methods
+        </div>
+        <img style="height:600px;" src="../assets/images/connection1.svg" class="gallery-image">
+          <span class="image-caption"><strong>Figure 1</strong></span>
+        <div class="body-text">
+          
+          We tested three different methods for connecting prompt embeddings to the motion transformer:
+          <ol>
+            <li>Putting them as the first couple tokens in the input in Fig 1.</li>
+            <li>Using them via cross-attention layers, as illustrated in Fig 2.</li>
+            <li>As shown in Fig 1&3. In the case of InternVideo, inspired by the Segment Anything Model (SAM), we do not differentiate between prompt types but treat them uniformly.</li>
+        </ol>
+        For Method 3, we adjusted our training strategy accordingly, which means that Strategy 3 in training section was not employed during training.
+        <div><img style="height:400px; display: inline-block;" src="../assets/images/connection2.svg" class="gallery-image">
+          <span class="image-caption"><strong>Figure 2</strong></span>  
+          <img style="height:300px; display: inline-block;" src="../assets/images/connect2_training3.svg" class="gallery-image">
+        </div>
+        <span class="image-caption"><strong>Figure 3</strong></span>  
+      </div>
+        <div class="subsubheader-text">5.2 Valor vs InternVideo
+        </div>
+        <div class="body-text">We train the motion transformer using different modality encoders and select the best-performing one.
+        </div>
+
+        <div class="subheader-text">6 Metric</div>
+        <div class="body-text">We evaluate our model using a private test set to assess performance in our use cases. Table 1 compares the text-to-motion model, which was previously built and trained with synthetic data using only text-motion paired data, against the text-video-to-motion model trained with synthetic data utilizing both text and video modalities. The results demonstrate that incorporating visual prompts did not negatively impact performance with text prompts.</div>
+        <img src="../assets/images/metric.svg" class="gallery-image">
+        <span class="image-caption"><strong>Table 1</strong></span>  
+        <div class="body-text">Table 2 indicates that the performance of our visual prompt is promising when compared to the text-to-motion performance.</div>
+        <img src="../assets/images/metric_video.svg" class="gallery-image">
+        <span class="image-caption"><strong>Table 2</strong></span> 
+        <div class="subheader-text">7 visualization results</div>
+        <video class="img-fluid" autoplay controls muted>
+          <source src="../assets/images/102411_result.mp4" type="video/mp4">
+        </video>
+        <video class="img-fluid" autoplay controls muted>
+          <source src="../assets/images/174442_result.mp4" type="video/mp4">
+        </video>
+        <video class="img-fluid" autoplay controls muted>
+          <source src="../assets/images/357120_result.mp4" type="video/mp4">
+        </video>
+        <video class="img-fluid" autoplay controls muted>
+          <source src="../assets/images/368642_result.mp4" type="video/mp4">
+        </video>
+        <video class="img-fluid" autoplay controls muted>
+          <source src="../assets/images/439615_result.mp4" type="video/mp4">
+        </video>
+        <div class="body-text">As observed, the model effectively supports different modalities and generates results based on the semantic meaning of various prompt types.</div>
+     
+        <div class="subheader-text">8 Conclusion</div>
+        <div class="body-text">Our motion transformer handles multimodal inputs effectively without the need for expanding the backbone architecture. However, incorporating dual modalities does not enhance the performance of the text-to-motion model alone.</div>
+        <div class="subheader-text">9 Future</div>
+        
+        <div class="body-text">To support fused-modality input, the model can be adapted to handle inputs such as "a man is waving his hands like &lt;img&gt;."</div>
+      
+        <div class="subheader-text">10 Reference</div>
+        <div class="body-text">Chen, S., He, X., Guo, L., Zhu, X., Wang, W., Tang, J., & Liu, J. (2023, April 17). Valor: Vision-audio-language omni-perception pretraining model and dataset. arXiv.org. https://arxiv.org/abs/2304.08345 </div>
+        <div class="body-text">Wang, Y., Li, K., Li, Y., He, Y., Huang, B., Zhao, Z., Zhang, H., Xu, J., Liu, Y., Wang, Z., Xing, S., Chen, G., Pan, J., Yu, J., Wang, Y., Wang, L., & Qiao, Y. (2022, December 7). InternVideo: General Video Foundation models via generative and Discriminative Learning. arXiv.org. https://arxiv.org/abs/2212.03191 </div>
+        <div class="body-text">Kirillov, A., Mintun, E., Ravi, N., Mao, H., Rolland, C., Gustafson, L., Xiao, T., Whitehead, S., Berg, A. C., Lo, W.-Y., Dollár, P., & Girshick, R. (2023, April 5). Segment anything. arXiv.org. https://arxiv.org/abs/2304.02643 </div>
+        <div class="body-text">Li, K., He, Y., Wang, Y., Li, Y., Wang, W., Luo, P., Wang, Y., Wang, L., & Qiao, Y. (2024, January 4). VideoChat: Chat-centric video understanding. arXiv.org. https://arxiv.org/abs/2305.06355 </div>
+        <div class="body-text">Xu, H., Ye, Q., Yan, M., Shi, Y., Ye, J., Xu, Y., Li, C., Bi, B., Qian, Q., Wang, W., Xu, G., Zhang, J., Huang, S., Huang, F., & Zhou, J. (2023, February 1). MPLUG-2: A modularized multi-modal foundation model across text, image and video. arXiv.org. https://arxiv.org/abs/2302.00402 </div>
+        <div class="body-text">Team, G., Georgiev, P., Lei, V. I., Burnell, R., Bai, L., Gulati, A., Tanzer, G., Vincent, D., Pan, Z., Wang, S., Mariooryad, S., Ding, Y., Geng, X., Alcober, F., Frostig, R., Omernick, M., Walker, L., Paduraru, C., Sorokin, C., … Vinyals, O. (2024, August 8). Gemini 1.5: Unlocking multimodal understanding across millions of tokens of context. arXiv.org. https://arxiv.org/abs/2403.05530 </div>
+        <div class="body-text">Li, J., Li, D., Savarese, S., & Hoi, S. (2023, June 15). Blip-2: Bootstrapping language-image pre-training with frozen image encoders and large language models. arXiv.org. https://arxiv.org/abs/2301.12597 </div>
+        <div class="body-text">Guo, C., Mu, Y., Javed, M. G., Wang, S., & Cheng, L. (2023, November 29). Momask: Generative masked modeling of 3D human motions. arXiv.org. https://arxiv.org/abs/2312.00063 </div>
+        <div class="body-text">Zhang, J., Zhang, Y., Cun, X., Huang, S., Zhang, Y., Zhao, H., Lu, H., & Shen, X. (2023, September 24). T2M-GPT: Generating human motion from textual descriptions with discrete representations. arXiv.org. https://arxiv.org/abs/2301.06052 </div>
+      </div>
+      </div>
+
+
+      
+
+      
+
+    <!-- FOOTER -->
+    <div id="footer">
+      <!-- 
+        TODO - Change href to your Instagram account (can also delete entire "a" element if no Instagram) 
+
+        This should be the same across all pages.
+      -->
+      <a class="icon-link" target="_blank" href="https://www.linkedin.com/in/chrislizenan/">
+        <image src="../assets/icons/linkedin-svgrepo-com.svg" class="footer-icon"/>
+      </a>
+      <!-- 
+        TODO - Change href to your Twitter account (can also delete entire "a" element if no Twitter) 
+      
+        This should be the same across all pages.
+      -->
+      <!-- 
+        TODO - Change the email after "mailto" to your contact email 
+      
+        This should be the same across all pages.
+      -->
+      <a class="icon-link" href="mailto:zenanlicareer@gmail.com">
+        <image src="../assets/icons/mail.svg" class="footer-icon"/>
+      </a>
+    </div>
+
+	</body>
+</html>

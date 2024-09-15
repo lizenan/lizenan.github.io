@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+
+    <!-- 
+      TODO
+
+      Upload your Unemployable (or whatever photo you like) to the assets/images folder
+      and change the name of the image below to match the uploaded one
+
+      Change the title in the <title> tag to whatever you would like the title of your portfolio to be
+
+      This should be the same across all pages.
+     -->
+    <link rel="icon" href="./assets/images/self.png" />
+		<title>Portfolio</title>
+    <meta name="description" content="A portfolio template for the Unemployables community.">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<link rel="stylesheet" href="./css/layout.css">
+    <link rel="stylesheet" href="./css/typography.css">
+    <link rel="stylesheet" href="./css/utilities.css">
+
+		<script defer src="./js/script.js"></script>
+	</head>
+	<body>
+    <!-- NAVBAR -->
+    <div class="navbar">
+      <a class="nav-title-link" href="./index.html">
+        <!-- TODO - Change the "Portfolio Title" to whatever you want displayed in the top left -->
+        <span class="nav-title">Zenan(Chris) Li</span>
+         <!-- TODO - Change the email after 'mailto:' to your email address for contact -->
+        <a class="button" href="mailto:zenanlicareer@gmail.com">
+          <span class="button-text">Contact Me</span>
+        </a>
+      </a>
+    </div>
+
+    <!-- MAIN PAGE CONTENT -->
+    <div id="main-content">
+
+      <!-- PORTFOLIO HEADER -->
+      <div id="portfolio-header">
+        <div id="portfolio-header-image-container">
+          <!-- 
+            TODO
+
+            - Change the img "src" attribute to point to the Unemployable image you uploaded (or whatever image).
+            - Change the number to point to your Unemployable & replace the OpenSea link with your own
+            - If you aren't using an Unemployable as your image, remove the entire "a" element
+          -->
+          <img src="./assets/images/self.png" class="portfolio-header-image">
+          <a class="no-underline" target="_blank" href="https://www.linkedin.com/in/chrislizenan/">
+            <span class="image-caption">@GDC</span>
+          </a>
+        </div>
+
+          <!-- 
+            TODO
+
+            - Change the main-title to whatver you want
+            - Change the body-text after that to a quick introduction to what you do
+            - Edit the button text if you feel like it. It will link to the projects section below.
+          -->
+        <div id="portfolio-header-text-container">
+            <div class="header-text">
+              <span class="main-title">Hey, I'm Zenan Li</span>
+              <div class="body-text">I’m currently a R&D Engineer at DeepMotion. Love solving Computer Vision, Computer Graphic problems. Specially in Human Pose Estimation, Generative Motion Generation, leveraging the power of Multimodal Models, MLLM and Video Understanding to overcome the shortage of data in motion domain, Parametric Video Generation, Object Detection and Tracking.</div>
+            </div>
+            <a class="button" id="my-work-link">
+              <span class="button-text">Check out my projects</span> 
+              <image src="./assets/icons/arrow-right.svg" class="right-arrow-icon"/>
+            </a>
+        </div>
+      </div>
+
+      <!-- ABOUT SECTION -->
+      <!-- 
+        TODO
+
+        - Change the subheader-text to whatever header you want
+        - Add paragraphs using the <div class="body-text"></div> elements in the "about-section-content"
+      -->
+      <div id="about-section">
+        <span class="subheader-text">My Background / About Me</span>
+        <div class="about-section-content">
+          <div class="body-text">I’m a Research and development engineer at <a href="https://www.deepmotion.com/">Deepmotion</a> since 2019. I obtained my M.S. Degree
+            supervised by <a href="https://www.researchgate.net/profile/Mikhail-Gofman">Prof. Mikhail Gofman</a> at California State University, Fullerton in 2019. After that I was supervised by <a href="https://libliu.info/">Prof. Libin
+            Liu</a> for 2 years at Deepmotion.</div>
+            <div class="body-text">My research interests include Computer Vision, Computer Graphic, Human Pose Estimation, Motion Generation, Multimodal Models, MLLM, Video Understanding, Parametric Video Generation, Object Detection and Tracking.</div>
+        </div>
+      </div>
+
+
+      <div id="publication-section">
+        <span class="subheader-text">Publications/Patents</span>
+        <div class="about-section-content">
+          <div class="row vspace-top">
+            <div class="col-sm-3">
+                <img src="./assets/images/saymotion_teaserimage.png" class="img-fluid">
+            </div>
+            <div class="col">
+                <div class="paper-title">
+                  Enhancing Narratives with SayMotion's text-to-3D animation and LLMs
+                </div>
+                <div class="paper-desc">
+                    Siggraph 2024 -- Real-Time Live!
+                </div>
+                <div class="paper-author">
+                    <span class="author">Kevin He, Annette Lapham, and <strong>Zenan Li</strong></span>
+                </div>
+                <div>
+                    <a href="https://www.deepmotion.com/saymotion">[Project]</a>
+                    <a href="https://doi.org/10.1145/3641520.3665309">[Paper]</a>
+                </div>
+            </div>
+        </div>
+        <div class="row vspace-top">
+          <div class="col-sm-3">
+            <video class="img-fluid" autoplay controls muted>
+              <source src="./assets/images/Rotoscope.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="col">
+              <div class="paper-title">
+                Methods and systems for detecting 3d poses from 2d images and editing 3d poses
+              </div>
+              <div class="paper-desc">
+                  US Patent
+              </div>
+              <div class="paper-author">
+                  <span class="author">Kaichuan He, Jakub Stepien, <strong>Zenan Li</strong>, Grzegorz Kabza, Marcin Hulist, Mikolaj Korcz</span>
+              </div>
+              <div>
+                  <a href="https://www.deepmotion.com/post/animate-3d-v4-1-rotoscope-pose-editor">[Project]</a>
+                  <a href="https://patents.google.com/patent/US20240095947A1/">[Paper]</a>
+              </div>
+          </div>
+      </div>
+        <div class="row vspace-top">
+          <div class="col-sm-3">
+              <img src="./assets/images/dyskinesia-analysis-bg.png" class="img-fluid">
+          </div>
+          <div class="col">
+              <div class="paper-title">
+                Measuring dynamic body movement
+              </div>
+              <div class="paper-desc">
+                US Patent
+              </div>
+              <div class="paper-author">
+                  <span class="author">Jeffery Broderick, Douglas Van Blaricom, Jerome Lisk, <strong>Zenan Li</strong>, Sukhad Anand</span>
+              </div>
+              <div>
+                  <a href="https://www.beneufit.com/tracer">[Project]</a>
+                  <a href="https://patents.google.com/patent/US11266341B2">[Paper]</a>
+              </div>
+          </div>
+      </div>
+      <div class="row vspace-top">
+        <div class="col-sm-3">
+            <img src="./assets/images/thesis.png" class="img-fluid">
+        </div>
+        <div class="col">
+            <div class="paper-title">
+              Multiple-Person 3D Human Mesh Recovery from Single 2D Picture
+            </div>
+            <div class="paper-desc">
+              Thesis
+            </div>
+            <div class="paper-author">
+                <span class="author"><strong>Zenan Li</strong></span>
+            </div>
+            <div>
+                <a href="https://scholarworks.calstate.edu/concern/theses/1831cs90v">[Paper]</a>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+      
+      <!-- PROJECTS / MY WORK SECTION -->
+      <div id="my-work-section">
+        <!-- TODO - Change the subheader-text to whatever you want the Projects section header to say -->
+        <span class="subheader-text">My Work / My Projects</span>
+
+        <div class="projects-container">
+          <!-- 
+            TODO
+
+            This is where the project cards live. Here's a base level project card for you to copy:
+            <div class="project-card">
+              <img src="./assets/images/IMAGE_NAME" class="project-image">
+              <div class="project-card-text-container">
+                <div class="subheader-text project-title">PROJECT_NAME</div>
+                <div class="body-text project-card-text">SMALL_PROJECT_DESCRIPTION</div>
+              </div>
+              <a class="button" href="./project-pages/PROJECT_PAGE_NAME.html">
+                <span class="button-text">Read More</span>
+                <image src="./assets/icons/arrow-right.svg" class="right-arrow-icon"/>
+              </a>
+            </div>
+
+            - To add a project to the this area, copy the above, paste it below this comment, and change the following:
+                - IMAGE_NAME: the name of the image file in assets/images
+                - PROJECT_NAME: the name of the project (keep it short, it only shows 1 line)
+                - SMALL_PROJECT_DESCRIPTION: a quick project description (max 4 lines)
+                - PROJECT_PAGE_NAME.html: the html filename for the project (must be in project-pages folder)
+          -->
+          <div class="project-card">
+            <img src="./assets/images/desktop.jpeg" class="project-image">
+            <div class="project-card-text-container">
+              <div class="subheader-text project-title">Text-Video-to-Motion</div>
+              <div class="body-text project-card-text">Elit pellentesque habitant morbi tristique senectus et netus et. Elementum tempus egestas sed sed risus pretium quam. Nibh ipsum consequat nisl vel pretium</div>
+            </div>
+            <a class="button" href="./project-pages/project-template.html">
+              <span class="button-text">Read More</span>
+              <image src="./assets/icons/arrow-right.svg" class="right-arrow-icon"/>
+            </a>
+          </div>
+          <div class="project-card">
+            <img src="./assets/images/code.jpeg" class="project-image">
+            <div class="project-card-text-container">
+              <div class="subheader-text project-title">MLLM guided Text-Motion data synthesis</div>
+              <div class="body-text project-card-text">Elit pellentesque habitant morbi tristique senectus et netus et. Elementum tempus egestas sed sed risus pretium quam. Nibh ipsum consequat nisl vel pretium</div>
+            </div>
+            <a class="button" href="./project-pages/project-template.html">
+              <span class="button-text">Read More</span>
+              <image src="./assets/icons/arrow-right.svg" class="right-arrow-icon"/>
+            </a>
+          </div>
+          <div class="project-card">
+            <img src="./assets/images/sketchbook.jpeg" class="project-image">
+            <div class="project-card-text-container">
+              <div class="subheader-text project-title">Score-guided diffusion Pose Estimation Fine Tuned</div>
+              <div class="body-text project-card-text">Elit pellentesque habitant morbi tristique senectus et netus et. Elementum tempus egestas sed sed risus pretium quam. Nibh ipsum consequat nisl vel pretium</div>
+            </div>
+            <a class="button" href="./project-pages/project-template.html">
+              <span class="button-text">Read More</span>
+              <image src="./assets/icons/arrow-right.svg" class="right-arrow-icon"/>
+            </a>
+          </div>
+          <div class="project-card">
+            <img src="./assets/images/sketchbook.jpeg" class="project-image">
+            <div class="project-card-text-container">
+              <div class="subheader-text project-title">Multi-person tracking</div>
+              <div class="body-text project-card-text">Elit pellentesque habitant morbi tristique senectus et netus et. Elementum tempus egestas sed sed risus pretium quam. Nibh ipsum consequat nisl vel pretium</div>
+            </div>
+            <a class="button" href="./project-pages/project-template.html">
+              <span class="button-text">Read More</span>
+              <image src="./assets/icons/arrow-right.svg" class="right-arrow-icon"/>
+            </a>
+          </div>
+          <div class="project-card">
+            <img src="./assets/images/sketchbook.jpeg" class="project-image">
+            <div class="project-card-text-container">
+              <div class="subheader-text project-title">Human(Face+Fingers+Body) Pose Estimation</div>
+              <div class="body-text project-card-text">Elit pellentesque habitant morbi tristique senectus et netus et. Elementum tempus egestas sed sed risus pretium quam. Nibh ipsum consequat nisl vel pretium</div>
+            </div>
+            <a class="button" href="./project-pages/project-template.html">
+              <span class="button-text">Read More</span>
+              <image src="./assets/icons/arrow-right.svg" class="right-arrow-icon"/>
+            </a>
+          </div>
+          <div class="project-card">
+            <img src="./assets/images/sketchbook.jpeg" class="project-image">
+            <div class="project-card-text-container">
+              <div class="subheader-text project-title">Object Detection</div>
+              <div class="body-text project-card-text">Elit pellentesque habitant morbi tristique senectus et netus et. Elementum tempus egestas sed sed risus pretium quam. Nibh ipsum consequat nisl vel pretium</div>
+            </div>
+            <a class="button" href="./project-pages/project-template.html">
+              <span class="button-text">Read More</span>
+              <image src="./assets/icons/arrow-right.svg" class="right-arrow-icon"/>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div id="footer">
+      <a class="icon-link" target="_blank" href="https://www.linkedin.com/in/chrislizenan/">
+        <image src="../assets/icons/linkedin-svgrepo-com.svg" class="footer-icon"/>
+      </a>
+      <!-- 
+        TODO - Change href to your Twitter account (can also delete entire "a" element if no Twitter) 
+      
+        This should be the same across all pages.
+      -->
+      <!-- 
+        TODO - Change the email after "mailto" to your contact email 
+      
+        This should be the same across all pages.
+      -->
+      <a class="icon-link" href="mailto:zenanlicareer@gmail.com">
+        <image src="../assets/icons/mail.svg" class="footer-icon"/>
+      </a>
+    </div>
+
+	</body>
+</html>

@@ -1,0 +1,177 @@
+
+
+<!-- 
+  IMPORTANT! 
+  
+  Keep this file unchanged to use as a template for all future project pages. 
+
+  For every new project you add to your portfolio, make a copy of this file in the
+  'project-pages' folder with a name related to the project.
+-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+    <!-- 
+      TODO
+
+      Upload your Unemployable (or whatever photo you like) to the assets/images folder
+      and change the name of the image below to match the uploaded one
+
+      Change the title in the <title> tag to whatever you would like the title of your portfolio to be
+
+      This should be the same across all pages.
+     -->
+     <title>Human Pose Estimation</title>
+    <meta name="description" content="A portfolio template for the Unemployables community.">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/typography.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+
+		<script defer src="../js/script.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+	</head>
+	<body>
+    <!-- NAVBAR -->
+    <div class="navbar">
+      <a class="nav-title-link" href="../index.html">
+        <!-- 
+          TODO - Change the "Portfolio Title" to whatever you want displayed in the top left
+
+          (this should be the same across all pages)
+         -->
+        <span class="nav-title">Project</span>
+        <!-- 
+          TODO - Change the email after 'mailto:' to your email address for contact 
+        
+          (this should be the same across all pages)
+        -->
+        <a class="button" href="mailto:zenanlicareer@gmail.com">
+          <span class="button-text">Contact Me</span>
+        </a>
+      </a>
+    </div>
+
+    <!-- MAIN PAGE CONTENT -->
+    <div id="main-content">
+
+      <!-- PROJECT HEADER -->
+      <div id="project-header">
+          <!-- 
+            TODO
+
+            - Change the 'main-title' text to the name of your project
+            - Change the 'body-text' text to a short and sweet description of your project (maybe the same as the one on the project card)
+            - Change "desktop.jpeg" to the image filename you uploaded in the assets/images folder.
+          -->
+        <div class="main-title">Human Pose Estimation</div>
+        <div class="body-text"></div>
+        <video class="project-header-image" src="../assets/images/saymotion_improvements.mp4" autoplay controls muted>
+      </div>
+
+      <!-- PROJECT DETAILS -->
+      <!-- 
+        TODO
+
+        - Change the 'subheader-text' to whatever header you want for project details
+        - Add paragraphs using the <div class="body-text"></div> elements in the "project-details-content"
+      -->
+      <div id="project-details">
+        <div class="project-details-content">
+          <div class="body-text">*In this article, We will introduce the improvements I have leadingly tried on, FYI, they are not all the improvements we have done for the product.</div>
+        </div>
+        <div class="subheader-text">1 Temporal-Aware Text Encoder</div>
+        <div class="gallery-image-container half-width">
+        <img src="../assets/images/sequential-aware.png" class="gallery-image">
+        </div>
+        <div class="body-text">in most of the state-of-art models, people used clip's text encoder as the frozen pre-trained text indicator. like MDM, MLM, MoMask, T2M-GPT, etc. the biggest problem of clip's text encoder is in order to aligning text and visual embeeding space, they demaged the sequential information in the global token by emphasized spatio relation information. Images are only containing spatio relation information. </div>
+        <div class="body-text">and motion is sequential intense information. it causes a problem that sometime a description contains multiple actions like "a man doing a cartwheel and run away", the model failed to produce the run away part. or in some cases, the model will reverse the action order. by run first then do a cartwheel.</div> 
+        <div class="body-text">in order to ease such issue. we have tried to replace it with a more powerful text intrepretor like MPNet and also experiment on using full token sequence via cross-attention layer.</div>
+        <div class="body-text">after doing so, we can obtain improvements as below</div>
+        <video class="img-fluid" autoplay controls muted>
+          <source src="../assets/images/temporal-aware.mp4" type="video/mp4">
+        </video>
+
+        <div class="subheader-text">3 LLM+RAG for prompt optimization</div>
+        <img src="../assets/images/LLM+RAG-prompt-optimizer.svg" class="gallery-image">
+        <div class="body-text">in product, users' input is unpredictable. you cannot require users to provide a informative and well organized in detail prompt with no typos. we have pull out some user prompts and analyze the differences between real-world user prompt and ground truth prompts we used to train our model. table 1 showing some examples of the user prompts. </div>
+        <div class="body-text">in order to fix such problem, we leverage the power of LLM model, We firstly ask LLM to fix all the typos and translate them to English. Then we use MPNet to convert user prompt to embedding space. and search our vectorDB to find the closest prompt in training data. the vectorDB stored all our vectorized training prompts</div>
+        <div class="body-text">We are not trying to make it as a retrieval-like function, so after find the closest prompt we are not replacing it directly. we use it as information to ask LLM rewrite the user's prompt follwoing the same style as the given sentence but the actions need to match the user's given prompt.</div>
+        <div class="body-text">after doing so, we can obtain improvements as below</div>
+        <video class="img-fluid" autoplay controls muted>
+          <source src="../assets/images/LLM+RAG.mp4" type="video/mp4">
+        </video>
+
+        <div class="subheader-text">4 RAG during motion Inference</div>
+        <img src="../assets/images/motionRAG_stucture.svg" class="gallery-image">
+        <span class="image-caption"><strong>Figure 1</strong></span> 
+          <div class="body-text">for a few cases, our model would not understand the prompt action and output not semantically matching motions. in order to reduce such cases happen, we can apply RAG to retrieve a segment of motion as hint for motion generator to generate motion along with that</div>
+          <div class="body-text">there are couple combination we need to test for RAG-guided generation. 1.which model we use to do motion retrieval 2.whether we treat the retrieved tokens replacable 3.how should we insert those retrieved tokens</div>
+          <div class="body-text">for these questions, we designed our experiments as following: for 1, compare the peformance of using MPNet text-to-text similarity matrix to obtain motion sequence in database, in the other hand, we use tmr's text-to-motion similarity matrix to retrieve motion seuqnece. for 2, make mask matrix accordingly to perform replacable and not replacble and compare their performance. for 3, we make it segment smapling, and interval insert sampling. and use transformed similarity score as the sampling ratio to decide retrieval length.</div>
+          <div>
+            \[ y = \frac{1}{1 + e^{-k(x - 0.5)}} \]
+          </div>
+          <div class="body-text">where \(k\) is constant, \(x\) is similarity score where range is \( [0, 1] \). \(e\) is the base of the natural logarithm</div>
+          <div class="body-text">its graph looks like below</div>
+          <div class="center-gallery-image-container center-half-width" >
+          <img src="../assets/images/scoring-graph.png" class="gallery-image">
+          </div>
+          <div class="body-text">We picked the winner of all combination and display its improvement results below.</div>
+          <video class="img-fluid" autoplay controls muted>
+            <source src="../assets/images/motionRAG1.mp4" type="video/mp4">
+          </video>
+          <video class="img-fluid" autoplay controls muted>
+            <source src="../assets/images/motionRAG2.mp4" type="video/mp4">
+          </video>
+          
+          <div class="subheader-text">5 Using beam search on Motion Variant Generation</div>
+          <div class="body-text">in product, we provide variant motion generation results, we apply beam search to provide partial variants.</div>
+          
+        <div class="subheader-text">9 Reference</div>
+        <div class="body-text">Team, G., Georgiev, P., Lei, V. I., Burnell, R., Bai, L., Gulati, A., Tanzer, G., Vincent, D., Pan, Z., Wang, S., Mariooryad, S., Ding, Y., Geng, X., Alcober, F., Frostig, R., Omernick, M., Walker, L., Paduraru, C., Sorokin, C., … Vinyals, O. (2024, August 8). Gemini 1.5: Unlocking multimodal understanding across millions of tokens of context. arXiv.org. https://arxiv.org/abs/2403.05530 </div>
+        <div class="body-text">Guo, C., Mu, Y., Javed, M. G., Wang, S., & Cheng, L. (2023, November 29). Momask: Generative masked modeling of 3D human motions. arXiv.org. https://arxiv.org/abs/2312.00063 </div>
+        <div class="body-text">Zhang, J., Zhang, Y., Cun, X., Huang, S., Zhang, Y., Zhao, H., Lu, H., & Shen, X. (2023, September 24). T2M-GPT: Generating human motion from textual descriptions with discrete representations. arXiv.org. https://arxiv.org/abs/2301.06052 </div>
+        <div class="body-text">Song, K., Tan, X., Qin, T., Lu, J., & Liu, T.-Y. (2020, November 2). MPNet: Masked and permuted pre-training for Language Understanding. arXiv.org. https://arxiv.org/abs/2004.09297 </div>
+        <div class="body-text">Petrovich, M., Black, M. J., & Varol, G. (2023, August 25). TMR: Text-to-motion retrieval using contrastive 3D human motion synthesis. arXiv.org. https://arxiv.org/abs/2305.00976 </div>
+      </div>
+      </div>
+
+
+      
+
+      
+
+    <!-- FOOTER -->
+    <div id="footer">
+      <!-- 
+        TODO - Change href to your Instagram account (can also delete entire "a" element if no Instagram) 
+
+        This should be the same across all pages.
+      -->
+      <a class="icon-link" target="_blank" href="https://www.linkedin.com/in/chrislizenan/">
+        <image src="../assets/icons/linkedin-svgrepo-com.svg" class="footer-icon"/>
+      </a>
+      <!-- 
+        TODO - Change href to your Twitter account (can also delete entire "a" element if no Twitter) 
+      
+        This should be the same across all pages.
+      -->
+      <!-- 
+        TODO - Change the email after "mailto" to your contact email 
+      
+        This should be the same across all pages.
+      -->
+      <a class="icon-link" href="mailto:zenanlicareer@gmail.com">
+        <image src="../assets/icons/mail.svg" class="footer-icon"/>
+      </a>
+    </div>
+
+	</body>
+</html>
