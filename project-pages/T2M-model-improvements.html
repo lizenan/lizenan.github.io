@@ -53,8 +53,8 @@
         
           (this should be the same across all pages)
         -->
-        <a class="button" href="mailto:zenanlicareer@gmail.com">
-          <span class="button-text">Contact Me</span>
+        <a class="button" href="../index.html">
+          <span class="button-text">Home Page</span>
         </a>
       </a>
     </div>
@@ -85,45 +85,61 @@
       -->
       <div id="project-details">
         <div class="project-details-content">
-          <div class="body-text">*In this article, We will introduce the improvements I have leadingly tried on, FYI, they are not all the improvements we have done for the product.</div>
+          <div class="body-text">*In this article, I will focus on the key improvements I have led, though these are not all the enhancements we have made to the product.</div>
         </div>
         <div class="subheader-text">1 Temporal-Aware Text Encoder</div>
         <div class="gallery-image-container half-width">
         <img src="../assets/images/sequential-aware.png" class="gallery-image">
+        <span class="image-caption"><strong>Figure 1. Text Tokens Through Cross Attention</strong></span> 
         </div>
-        <div class="body-text">in most of the state-of-art models, people used clip's text encoder as the frozen pre-trained text indicator. like MDM, MLM, MoMask, T2M-GPT, etc. the biggest problem of clip's text encoder is in order to aligning text and visual embeeding space, they demaged the sequential information in the global token by emphasized spatio relation information. Images are only containing spatio relation information. </div>
-        <div class="body-text">and motion is sequential intense information. it causes a problem that sometime a description contains multiple actions like "a man doing a cartwheel and run away", the model failed to produce the run away part. or in some cases, the model will reverse the action order. by run first then do a cartwheel.</div> 
-        <div class="body-text">in order to ease such issue. we have tried to replace it with a more powerful text intrepretor like MPNet and also experiment on using full token sequence via cross-attention layer.</div>
-        <div class="body-text">after doing so, we can obtain improvements as below</div>
+        <div class="body-text">In most state-of-the-art models, such as MDM, MLM, MoMask, and T2M-GPT, the CLIP text encoder is commonly used as a frozen pre-trained text encoder. However, a significant issue with CLIP's text encoder is that, to align text and visual embedding spaces, it sacrifices sequential information in favor of emphasizing spatial relations. Since images contain only spatial information, this approach can lead to a loss of important sequential context in text data.</div>
+        <div class="body-text">Motion data, which is inherently sequential, exacerbates this issue. For example, when a description contains multiple actions, such as "a man doing a cartwheel and running away," the model may struggle to generate the "running away" part or, in some cases, may reverse the action order, producing "running away" before "doing a cartwheel."</div> 
+        <div class="body-text">To address this issue, we have experimented with replacing the text encoder with a more powerful interpreter, such as MPNet, and explored using the full token sequence via cross-attention layers. as shown in Figure 1.</div>
+        <div class="body-text">After implementing these changes, we observed the following improvements:</div>
         <video class="img-fluid" autoplay controls muted>
           <source src="../assets/images/temporal-aware.mp4" type="video/mp4">
         </video>
 
         <div class="subheader-text">3 LLM+RAG for prompt optimization</div>
         <img src="../assets/images/LLM+RAG-prompt-optimizer.svg" class="gallery-image">
-        <div class="body-text">in product, users' input is unpredictable. you cannot require users to provide a informative and well organized in detail prompt with no typos. we have pull out some user prompts and analyze the differences between real-world user prompt and ground truth prompts we used to train our model. table 1 showing some examples of the user prompts. </div>
-        <div class="body-text">in order to fix such problem, we leverage the power of LLM model, We firstly ask LLM to fix all the typos and translate them to English. Then we use MPNet to convert user prompt to embedding space. and search our vectorDB to find the closest prompt in training data. the vectorDB stored all our vectorized training prompts</div>
-        <div class="body-text">We are not trying to make it as a retrieval-like function, so after find the closest prompt we are not replacing it directly. we use it as information to ask LLM rewrite the user's prompt follwoing the same style as the given sentence but the actions need to match the user's given prompt.</div>
-        <div class="body-text">after doing so, we can obtain improvements as below</div>
+        <span class="image-caption"><strong>Figure 2. Prompt Optimizer Pipeline</strong></span>
+        <div class="body-text">In practice, users' inputs can be unpredictable, and it is unrealistic to expect them to provide informative, well-organized prompts free of typos. We have extracted some user prompts and analyzed the differences between real-world user prompts and the ground truth prompts used to train our model.</div>
+        <div class="body-text">To address this issue, we leverage LLM models to correct typos and translate user prompts into English. We then use MPNet to convert these corrected prompts into embedding space and search our vectorDB to find the closest match in the training data. The vectorDB stores all vectorized training prompts.</div>
+        <div class="body-text">We are not using this as a direct retrieval function. Instead of directly replacing the user's prompt with the closest match, we use the retrieved prompt as information to instruct the LLM to rewrite the user's prompt. This rewritten prompt maintains the same style as the retrieved sentence while ensuring that the actions align with the user's original prompt.</div>
+        <div class="body-text">After implementing these changes, we observed the following improvements:</div>
         <video class="img-fluid" autoplay controls muted>
           <source src="../assets/images/LLM+RAG.mp4" type="video/mp4">
         </video>
 
         <div class="subheader-text">4 RAG during motion Inference</div>
         <img src="../assets/images/motionRAG_stucture.svg" class="gallery-image">
-        <span class="image-caption"><strong>Figure 1</strong></span> 
-          <div class="body-text">for a few cases, our model would not understand the prompt action and output not semantically matching motions. in order to reduce such cases happen, we can apply RAG to retrieve a segment of motion as hint for motion generator to generate motion along with that</div>
-          <div class="body-text">there are couple combination we need to test for RAG-guided generation. 1.which model we use to do motion retrieval 2.whether we treat the retrieved tokens replacable 3.how should we insert those retrieved tokens</div>
-          <div class="body-text">for these questions, we designed our experiments as following: for 1, compare the peformance of using MPNet text-to-text similarity matrix to obtain motion sequence in database, in the other hand, we use tmr's text-to-motion similarity matrix to retrieve motion seuqnece. for 2, make mask matrix accordingly to perform replacable and not replacble and compare their performance. for 3, we make it segment smapling, and interval insert sampling. and use transformed similarity score as the sampling ratio to decide retrieval length.</div>
+        <span class="image-caption"><strong>Figure 3. motionRAG pipeline in different settings</strong></span> 
+          <div class="body-text">In some cases, our model may misinterpret the prompt action and produce motions that do not match semantically. To reduce such occurrences, we can apply RAG to retrieve a segment of motion as a hint for the motion generator, guiding it to generate motions that align with the provided context.</div>
+          <div class="body-text">There are several combinations we need to test for RAG-guided generation:
+            <ol>
+              <li>Which model should we use for motion retrieval?</li>
+              <li>Should we treat the retrieved tokens as replaceable?</li>
+              <li>How should we integrate the retrieved tokens into the generation process?</li>
+            </ol>
+          </div>
+          <div class="body-text">To address these questions, we designed our experiments as follows:
+            <ol>
+              <li>Model Comparison: We compared the performance of using MPNet's text-to-text similarity matrix to retrieve motion sequences from the database with using TMR's text-to-motion similarity matrix for the same purpose.</li>
+              <li>Token Replacement: We created mask matrices to test whether retrieved tokens should be treated as replaceable or not, and compared the performance of these approaches.</li>
+              <li>Token Integration: We experimented with two methods for integrating retrieved tokens: segment sampling and interval insert sampling. We used the transformed similarity score as the sampling ratio to determine the retrieval length.</li>
+            </ol>
+          </div>
+          <div class="body-text">sampling ratio formula is shown as below:</div>
           <div>
             \[ y = \frac{1}{1 + e^{-k(x - 0.5)}} \]
           </div>
           <div class="body-text">where \(k\) is constant, \(x\) is similarity score where range is \( [0, 1] \). \(e\) is the base of the natural logarithm</div>
-          <div class="body-text">its graph looks like below</div>
+          <div class="body-text">The graph is illustrated in Figure 4.</div>
           <div class="center-gallery-image-container center-half-width" >
           <img src="../assets/images/scoring-graph.png" class="gallery-image">
+          <span class="image-caption"><strong>Figure 4. sampling graph based on similarity value</strong></span>
           </div>
-          <div class="body-text">We picked the winner of all combination and display its improvement results below.</div>
+          <div class="body-text">We selected the best combination from all tested options and present its improvement results below.</div>
           <video class="img-fluid" autoplay controls muted>
             <source src="../assets/images/motionRAG1.mp4" type="video/mp4">
           </video>
@@ -132,9 +148,9 @@
           </video>
           
           <div class="subheader-text">5 Using beam search on Motion Variant Generation</div>
-          <div class="body-text">in product, we provide variant motion generation results, we apply beam search to provide partial variants.</div>
+          <div class="body-text">In product, we provide variant motion generation results, we apply beam search to provide partial variants.</div>
           
-        <div class="subheader-text">9 Reference</div>
+        <div class="subheader-text">6 Reference</div>
         <div class="body-text">Team, G., Georgiev, P., Lei, V. I., Burnell, R., Bai, L., Gulati, A., Tanzer, G., Vincent, D., Pan, Z., Wang, S., Mariooryad, S., Ding, Y., Geng, X., Alcober, F., Frostig, R., Omernick, M., Walker, L., Paduraru, C., Sorokin, C., … Vinyals, O. (2024, August 8). Gemini 1.5: Unlocking multimodal understanding across millions of tokens of context. arXiv.org. https://arxiv.org/abs/2403.05530 </div>
         <div class="body-text">Guo, C., Mu, Y., Javed, M. G., Wang, S., & Cheng, L. (2023, November 29). Momask: Generative masked modeling of 3D human motions. arXiv.org. https://arxiv.org/abs/2312.00063 </div>
         <div class="body-text">Zhang, J., Zhang, Y., Cun, X., Huang, S., Zhang, Y., Zhao, H., Lu, H., & Shen, X. (2023, September 24). T2M-GPT: Generating human motion from textual descriptions with discrete representations. arXiv.org. https://arxiv.org/abs/2301.06052 </div>

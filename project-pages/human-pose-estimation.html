@@ -53,8 +53,8 @@
         
           (this should be the same across all pages)
         -->
-        <a class="button" href="mailto:zenanlicareer@gmail.com">
-          <span class="button-text">Contact Me</span>
+        <a class="button" href="../index.html">
+          <span class="button-text">Home Page</span>
         </a>
       </a>
     </div>
@@ -73,7 +73,7 @@
           -->
         <div class="main-title">Human Pose Estimation</div>
         <div class="body-text"></div>
-        <video class="project-header-image" src="../assets/images/saymotion_improvements.mp4" autoplay controls muted>
+        <video class="project-header-image" src="../assets/images/A3D_2.mp4" autoplay controls muted>
       </div>
 
       <!-- PROJECT DETAILS -->
@@ -85,61 +85,204 @@
       -->
       <div id="project-details">
         <div class="project-details-content">
-          <div class="body-text">*In this article, We will introduce the improvements I have leadingly tried on, FYI, they are not all the improvements we have done for the product.</div>
+          <div class="subheader-text">1 Body Estimation</div>
+        <div class="gallery-image-container">
+        <img src="../assets/images/PE.svg" class="gallery-image">
+        <span class="image-caption"><strong>Figure 1. PE structure</strong></span>
         </div>
-        <div class="subheader-text">1 Temporal-Aware Text Encoder</div>
+        <div class="body-text">We evaluated several approaches for 3D Human Pose Estimation, including 3D lifting from 2D keypoints (both CNN-based and transformer-based), SMPL-based recovery methods (such as HMR and SMPLer-x), and direct 3D estimation techniques (such as stacked hourglass pose networks). SMPL-based recovery methods often suffer from long processing times, high computational costs, and minor positional offsets when mapping poses back to images. 3D lifting methods typically provide lower accuracy. On the other hand, direct 3D estimation methods frequently struggle with the lack of sufficient 3D ground truth data for training. After experimenting with various solutions, we chose direct 3D estimation for our product due to its accuracy, lower processing time requirements, and suitability for real-time mobile applications.</div>
+        <div class="body-text">To address the shortage of ground truth 3D data and enhance the overall quality, we have enhanced our solution through several approaches:
+        <ol>
+          <li>Augmentation with Synthetic 3D Data: We incorporate synthetic 3D data generated from motion capture (mocap) systems to enrich our training dataset.</li>
+          <li>Rotoscoping Tools: We use rotoscoping tools to obtain real 3D data from video footage, providing additional ground truth for training.</li>
+          <li>Model Structure Improvements: We refine the architecture of the vanilla model to improve its performance and accuracy.</li>
+          <li>Two-Stage Training: We employ a two-stage training approach to incrementally improve model accuracy and robustness.</li>
+          <li>Integration of 2D and 3D Data: We use an end-to-end training strategy that organically combines 2D and 3D data to leverage the strengths of both modalities.</li>
+          <li>Enhanced Weight Initialization: We implement advanced weight initialization techniques to facilitate better convergence during training.</li>
+          <li>Score-Guided Diffusion Fine-Tuning: We apply score-guided diffusion methods for fine-tuning, which helps in refining model predictions and enhancing overall performance in depth dimension.</li>
+        </ol>
+        </div>
+        <div class="subsubheader-text">1.1 Synthetic Data Augmentation</div>
+        <div class="body-text">For the mocap data, we take the following steps to create a diverse and extensive synthetic dataset:
+          <ol>
+            <li>Retargeting and Rendering: We retarget mocap data to different character models, including male, female, and child figures, with various outfits and body shapes. This ensures a wide range of appearances and styles.</li>
+            <li>Scene Setup: We create a variety of environments such as beaches, offices, parks, and factories, incorporating different lighting conditions to simulate real-world scenarios.</li>
+            <li>Camera Angles: We use multiple camera angles to capture diverse perspectives of the scenes.</li>
+            <li>Camera Extrinsic Matrix: By applying multiple camera extrinsic matrices to the mocap's world coordinates, we generate a large volume of synthetic 3D data paired with RGB images.</li>
+
+          </ol>
+        </div> 
+
+        <div class="project-gallery-content">
+          <div class="gallery-image-container half-width">
+            <img src="../assets/images/synthetic_pe_data.png" class="gallery-image">
+          </div>
+          <div class="gallery-image-container half-width">
+            <img src="../assets/images/synthetic_data_pe.png" class="gallery-image">
+          </div>
+          <span class="image-caption"><strong>Figure 2. 3D synthetic data exmaple</strong></span>
+        </div>
         <div class="gallery-image-container half-width">
-        <img src="../assets/images/sequential-aware.png" class="gallery-image">
+          <img src="../assets/images/synthetic_data_creation.png" class="gallery-image">
+          <span class="image-caption"><strong>Figure 3. Scene creation</strong></span>
         </div>
-        <div class="body-text">in most of the state-of-art models, people used clip's text encoder as the frozen pre-trained text indicator. like MDM, MLM, MoMask, T2M-GPT, etc. the biggest problem of clip's text encoder is in order to aligning text and visual embeeding space, they demaged the sequential information in the global token by emphasized spatio relation information. Images are only containing spatio relation information. </div>
-        <div class="body-text">and motion is sequential intense information. it causes a problem that sometime a description contains multiple actions like "a man doing a cartwheel and run away", the model failed to produce the run away part. or in some cases, the model will reverse the action order. by run first then do a cartwheel.</div> 
-        <div class="body-text">in order to ease such issue. we have tried to replace it with a more powerful text intrepretor like MPNet and also experiment on using full token sequence via cross-attention layer.</div>
-        <div class="body-text">after doing so, we can obtain improvements as below</div>
-        <video class="img-fluid" autoplay controls muted>
-          <source src="../assets/images/temporal-aware.mp4" type="video/mp4">
-        </video>
-
-        <div class="subheader-text">3 LLM+RAG for prompt optimization</div>
-        <img src="../assets/images/LLM+RAG-prompt-optimizer.svg" class="gallery-image">
-        <div class="body-text">in product, users' input is unpredictable. you cannot require users to provide a informative and well organized in detail prompt with no typos. we have pull out some user prompts and analyze the differences between real-world user prompt and ground truth prompts we used to train our model. table 1 showing some examples of the user prompts. </div>
-        <div class="body-text">in order to fix such problem, we leverage the power of LLM model, We firstly ask LLM to fix all the typos and translate them to English. Then we use MPNet to convert user prompt to embedding space. and search our vectorDB to find the closest prompt in training data. the vectorDB stored all our vectorized training prompts</div>
-        <div class="body-text">We are not trying to make it as a retrieval-like function, so after find the closest prompt we are not replacing it directly. we use it as information to ask LLM rewrite the user's prompt follwoing the same style as the given sentence but the actions need to match the user's given prompt.</div>
-        <div class="body-text">after doing so, we can obtain improvements as below</div>
-        <video class="img-fluid" autoplay controls muted>
-          <source src="../assets/images/LLM+RAG.mp4" type="video/mp4">
-        </video>
-
-        <div class="subheader-text">4 RAG during motion Inference</div>
-        <img src="../assets/images/motionRAG_stucture.svg" class="gallery-image">
-        <span class="image-caption"><strong>Figure 1</strong></span> 
-          <div class="body-text">for a few cases, our model would not understand the prompt action and output not semantically matching motions. in order to reduce such cases happen, we can apply RAG to retrieve a segment of motion as hint for motion generator to generate motion along with that</div>
-          <div class="body-text">there are couple combination we need to test for RAG-guided generation. 1.which model we use to do motion retrieval 2.whether we treat the retrieved tokens replacable 3.how should we insert those retrieved tokens</div>
-          <div class="body-text">for these questions, we designed our experiments as following: for 1, compare the peformance of using MPNet text-to-text similarity matrix to obtain motion sequence in database, in the other hand, we use tmr's text-to-motion similarity matrix to retrieve motion seuqnece. for 2, make mask matrix accordingly to perform replacable and not replacble and compare their performance. for 3, we make it segment smapling, and interval insert sampling. and use transformed similarity score as the sampling ratio to decide retrieval length.</div>
-          <div>
-            \[ y = \frac{1}{1 + e^{-k(x - 0.5)}} \]
+        <div class="subsubheader-text">1.2 Rotoscoping Tool Data Augmentation</div>
+        *We collect data from users who voluntarily sign an agreement allowing us to use their data to enhance our service quality.
+        <div class="body-text">In our A3D pipeline, we utilize a 3D rotoscoping tool that allows users to correct inaccurate poses, providing additional ground truth for training.</div>
+        <div class="gallery-image-container half-width">
+        <img src="../assets/images/rotoscoping_data.png" class="gallery-image">
+        <span class="image-caption"><strong>Figure 4. Rotoscoping Tool</strong></span>
+      </div>
+        <div class="subsubheader-text">1.3 Model Refinement</div>
+        <div class="body-text">As shown in Figure 1, our experiments revealed that incorporating a classification block and using its loss as an auxiliary loss significantly improves the model's accuracy overall. Notably, for extreme cases such as high occlusion scenarios, our model demonstrates enhanced accuracy and stability in pose estimation compared to other models. Our joint training with the classification block achieves a 99.3% accuracy in detecting occluded joints. This precise additional metadata allows us to implement post-processing techniques that further enhance the performance of our product.</div>
+        <div class="subsubheader-text">1.4 Training Strategy</div>
+        <div class="body-text">After conducting experiments, we found that splitting the training into two stages can further enhance the model's accuracy. In the first stage, our second hourglass block estimates a 2D heatmap instead of a 3D heatmap. Once the 2D model converges effectively, we use it as the warm-up weights for the second stage. In this stage, we integrate a case-specific weight initialization solution. For the layer responsible for generating the final 3D heatmap, which has a different shape due to increased channel size compared to the 2D version, we do not discard the original weights. Instead, we adapt these weights to initialize the expanded channels, as depicted in Figure 5</div>
+        <div class="body-text">For instance, in our 2D version(First stage of training), the weight shape of the 2D scoring layer is \([16, 1024,1,1]\) where \(16\) represents the number of joints, and the kernel size \([1,1]\) indicating that this convolutional layer can be treated as a fully connected layer. The 3D scoring layer's weight shape is \([16 \times 64, 1024,1,1]\), where \(64\) represents the depth dimension, reflecting the spatial meaning. </div>
+        <div class="body-text">To initialize the weights for the 3D scoring layer, we first consider each joint's weight in the 2D model as \([1, 1024]\). We need to extend this to \([64, 1024]\) to match the depth dimension. To achieve this, we calculate each joint's depth distribution from our training dataset, then apply a softmax function to ensure the distribution sums to 1. We repeatly multiply \([1, 1024]\) with \(softmax[i]\), where \(i=0,2,3...63\), then concatenate the results together. Consequently, the final weight for each joint is extended from \([1, 1024]\) to \([64, 1024]\). In other words, if we apply  matrix multiplication between softmax result(\([1,64]\)) and 3D scoring layer(\([64,1024]\)), we will get a \([1,1024]\) Tensor all value equals to 2D scoring layer's weights.</div>
+        <div class="gallery-image-container half-width">
+        <img src="../assets/images/weight_initial.svg" class="gallery-image">
+        <span class="image-caption"><strong>Figure 5. case-specific weight initialization</strong></span>
+      </div>
+        <div class="body-text">The results demonstrate that by initializing the weights using this method, the model converged significantly faster and achieved higher accuracy according to our evaluation metrics. This approach not only accelerates the training process but also enhances the model's overall performance.</div>
+        <div class="subsubheader-text">1.5 Loss</div>
+        <div class="body-text">To enhance the robustness of our final model in real-world scenarios, we combine both 2D and 3D data for the second stage of training. For 2D data, we compute only the 2D loss, while for 3D data, we calculate both 2D and 3D losses. Additionally, we integrate classification loss into the backpropagation process. This loss structure helps the model generalize better across different data types and improves its overall performance.</div>
+        <div class="body-text">By training our model under this mechanism, it can generate highly accurate 3D keypoints for in-the-wild images. This approach ensures that the model handles diverse scenarios, including occlusions and challenging poses, making it robust and reliable for real-world applications.</div>
+        <div class="subsubheader-text">1.6 Evaluaion Metrics</div>
+        <div class="body-text">We tested our model using the Human3.6M test set under Protocol 1. The results showed improvements in performance, with higher accuracy in 2D and lower MPJPE in 3D pose estimation compared to previous approaches, as shown in table 1.</div>
+        <div class="gallery-image-container">
+          <img src="../assets/images/PE_metric.svg" class="gallery-image">
+          <span class="image-caption"><strong>Table 1. Body PE metric</strong></span>
           </div>
-          <div class="body-text">where \(k\) is constant, \(x\) is similarity score where range is \( [0, 1] \). \(e\) is the base of the natural logarithm</div>
-          <div class="body-text">its graph looks like below</div>
-          <div class="center-gallery-image-container center-half-width" >
-          <img src="../assets/images/scoring-graph.png" class="gallery-image">
+        <div class="subsubheader-text">1.7 Score-guided diffusion fine-tuning</div>
+        <div class="body-text">We found that ScoreHMR shows great potential in further improving the pose quality, particularly in providing more realistic depth estimation based on human 2D keypoints. Our process involves converting the 3D keypoints to 2D keypoints, along with providing the bounding box result. After obtaining SMPL-based vertex results, we convert these back into 3D keypoints. Using ScoreHMR, we fine-tune the original 3D keypoints with the provided 3D keypoint results. Below, we present an example illustrating the before and after effects of ScoreHMR fine-tuning on pose quality.</div>
+        <div class="gallery-image-container">
+          <img src="../assets/images/scoreHMR_finetune.svg" class="gallery-image">
+          <span class="image-caption"><strong>Fugure 6. exmaple comparison between w and w/o scoreHMR</strong></span>
           </div>
-          <div class="body-text">We picked the winner of all combination and display its improvement results below.</div>
-          <video class="img-fluid" autoplay controls muted>
-            <source src="../assets/images/motionRAG1.mp4" type="video/mp4">
-          </video>
-          <video class="img-fluid" autoplay controls muted>
-            <source src="../assets/images/motionRAG2.mp4" type="video/mp4">
-          </video>
+        <div class="subsubheader-text">1.8 Distriminator</div>
+        <div class="body-text">We developed a discriminator specifically for pose quality assessment. The discriminator's output score serves as a realism judgment tool, helping to evaluate and ensure the generated poses align with realistic human movements. This score allows us to identify and refine poses that may appear unnatural or deviate from expected motion patterns.</div>
+        <div class="gallery-image-container half-width">
+          <img src="../assets/images/discriminator.svg" class="gallery-image">
+          <span class="image-caption"><strong>Figure 7. Distriminator Training</strong></span>
+          </div>
+        <div class="subsubheader-text">1.9 Mobile Version</div>
+        <div class="body-text">We implemented distillation learning to train a smaller, lightweight model capable of running in real-time on mobile devices.</div>
+        </div>
+        <div class="gallery-image-container half-width">
+        <video class="img-fluid" autoplay controls muted>
+          <source src="../assets/images/mobile_version.mp4" type="video/mp4">
+        </video>
+      </div>
+        <div class="subheader-text">2 Face estimation</div>
+        <div class="gallery-image-container">
+        <img src="../assets/images/face_estimation.svg" class="gallery-image">
+        <span class="image-caption"><strong>Figure 8. face estimation pipeline</strong></span>
+        </div>
+        <div class="body-text">For face estimation, we employ backbonds both face detection and facial landmark prediction, similar to our body estimation solution. The process starts with the face detector, which locates the human face in the image. Afterward, we use a facial landmark prediction model to obtain the key face landmarks. Each facial landmark is pre-matched to a vertex in our 4DFM model.</div>
+        <div class="body-text">We solve this using a standard 3D Morphable Model (3DMM) fitting process as follows:
+          <ol>
+            <li>Camera Parameters Estimation: Solve camera parameters using 2D landmarks and corresponding 3D vertices.</li>
+            <li>Shape Component Estimation: Apply the camera parameters to the 3D vertices and solve for the basic shape components with 2D landmarks</li>
+            <li>Expression Blendshapes: Solve for the expression blendshapes using 3D vertices from 2. and 2D landmarks</li>
+            <li>Refinement: Repeat steps 1–3 for refinement over several iterations.</li>
+            <li>Blendshape Weights: Obtain the blendshape weights from the refined model.</li>
+            <li>Retargeting: Retarget the blendshape weights to a target face model.</li>
+            <li>Application: Apply the blendshape weights to the target face model for the final result.</li>
+          </ol>
+        </div>
+        <div class="project-gallery-content">
+        <div class="gallery-image-container half-width">
+          <img style="height:400px;" src="../assets/images/landmarks.png" class="gallery-image">
+        </div>
+        <div class="gallery-image-container half-width">
+          <img style="height:400px;" src="../assets/images/4DFM_matched_vectices.png" class="gallery-image">
+        </div>
+        <span class="image-caption"><strong>Figure 9. landmarks and their matched vectices in 4DFM</strong></span>
+      </div>
+        <div class="body-text">Our face landmark prediction model contain 106 keypoints including eyes and eyelids. Below is our face estimation result.</div>
+        <video class="img-fluid" autoplay controls muted>
+          <source src="../assets/images/face_estimation_example.mp4" type="video/mp4">
+        </video>
+        
+        <div class="subheader-text">3 Fingers Estimation</div>
+        <div class="gallery-image-container">
+          <img src="../assets/images/hand_estimation_pipeline.drawio.svg" class="gallery-image">
+          <span class="image-caption"><strong>Figure 10. hand estimation pipeline</strong></span>
+          </div>
+        <div class="body-text">For finger estimation, the hand detector and keypoint prediction model share a similar structure to our body estimation model. It is important to note that distinguishing between left and right hands using only a hand detector is challenging. Therefore, we utilize the body estimation results to accurately assign bounding boxes to the left and right hands.</div>
+        <div class="gallery-image-container half-width">
+          <img src="../assets/images/hand_keypoints.png" class="gallery-image">
+          <span class="image-caption"><strong>Figure 11. hand keypoints</strong></span>
+          </div>
+        <video class="img-fluid" autoplay controls muted>
+          <source src="../assets/images/hand_estimation_example.mp4" type="video/mp4">
+        </video>
+        
+        <div class="subheader-text">4 Multi-person Estimation</div>
+        <div class="body-text">Our multi-person pose estimation uses a bottom-up approach, following the same process as single-person pose estimation as outlined in Section 1, 2, and 3. The only addition is the inclusion of a person ID as metadata during pose generation. For details on the multi-person tracking solution, please refer to the section on <a href="./Object-Detection-Tracking.html">#object detection and tracking</a></div>
+
+        <div class="subheader-text">5 Some Interesting Experiments we also done</div>
+        <div class="body-text">We also explore several ideas to potentially enhance pose quality:
+          <ol>
+            <li>Motion deblurring</li>
+            <li>Segmentation prior to pose estimation</li>
+            <li>Using 20-joint models for improved calculation of hands and feet rotations</li>
+            <li>Prediction focused solely on the lower body</li>
+            <li>Pose estimation for animals</li>
+          </ol>
+        </div>
+        <div class="subsubheader-text">5.1 Motion deblurring</div>
+        <div class="body-text">As Figure 8 shown, heatmaps can be mismatched in images affected by motion blur. To address this issue, we employed DeblurGAN, an example is depicted in Figure 9. However, as we can see, the current state-of-the-art motion deblurring models did not meet our expectations for these use cases. This approach remains a potential avenue for future improvement</div>
+        <div class="project-gallery-content">
+        <div class="gallery-image-container half-width">
+          <img src="../assets/images/motion_blur.svg" class="gallery-image">
+          <span class="image-caption"><strong>Figure 12. heatmap from motion blurred frame</strong></span>
+        </div>
+        <div class="gallery-image-container half-width">
+          <img src="../assets/images/motion_deblur.png" class="gallery-image">
+          <span class="image-caption"><strong>Figure 13. Deblured result on the right</strong></span>
+        </div>
+      </div>
+        <div class="subsubheader-text">5.2 Background Processing prior to Pose Estimation</div>
+        <div class="body-text">The idea was to reduce unrelated information, or noise, from the background of an image to achieve more accurate predictions. However, we did not observe significant improvements with this approach. Additionally, it increased processing time.</div>
+        <div class="project-gallery-content">
+        <div class="gallery-image-container half-width">
+          <img src="../assets/images/background_substraction.png" class="gallery-image">
+        </div>
+        <div class="gallery-image-container half-width">
+          <img src="../assets/images/background_info.png" class="gallery-image">
+        </div>
+        <span class="image-caption"><strong>Figure 14. provide background information as one of the input to PE model</strong></span>
+      </div>
+        <video class="img-fluid" autoplay controls muted>
+          <source src="../assets/images/segmentation.mp4" type="video/mp4">
           
-          <div class="subheader-text">5 Using beam search on Motion Variant Generation</div>
-          <div class="body-text">in product, we provide variant motion generation results, we apply beam search to provide partial variants.</div>
-          
-        <div class="subheader-text">9 Reference</div>
-        <div class="body-text">Team, G., Georgiev, P., Lei, V. I., Burnell, R., Bai, L., Gulati, A., Tanzer, G., Vincent, D., Pan, Z., Wang, S., Mariooryad, S., Ding, Y., Geng, X., Alcober, F., Frostig, R., Omernick, M., Walker, L., Paduraru, C., Sorokin, C., … Vinyals, O. (2024, August 8). Gemini 1.5: Unlocking multimodal understanding across millions of tokens of context. arXiv.org. https://arxiv.org/abs/2403.05530 </div>
-        <div class="body-text">Guo, C., Mu, Y., Javed, M. G., Wang, S., & Cheng, L. (2023, November 29). Momask: Generative masked modeling of 3D human motions. arXiv.org. https://arxiv.org/abs/2312.00063 </div>
-        <div class="body-text">Zhang, J., Zhang, Y., Cun, X., Huang, S., Zhang, Y., Zhao, H., Lu, H., & Shen, X. (2023, September 24). T2M-GPT: Generating human motion from textual descriptions with discrete representations. arXiv.org. https://arxiv.org/abs/2301.06052 </div>
-        <div class="body-text">Song, K., Tan, X., Qin, T., Lu, J., & Liu, T.-Y. (2020, November 2). MPNet: Masked and permuted pre-training for Language Understanding. arXiv.org. https://arxiv.org/abs/2004.09297 </div>
-        <div class="body-text">Petrovich, M., Black, M. J., & Varol, G. (2023, August 25). TMR: Text-to-motion retrieval using contrastive 3D human motion synthesis. arXiv.org. https://arxiv.org/abs/2305.00976 </div>
+        </video>
+        <span class="image-caption"><strong>background removal</strong></span>
+        <div class="subsubheader-text">5.3 Additional Joints</div>
+        <div class="body-text">Due to the smaller dataset containing additional joints, the overall accuracy may be affected.</div>
+        <div class="gallery-image-container half-width">
+          <img style="height:500px;width:300px;" src="../assets/images/20_joints.png" class="gallery-image">
+          <span class="image-caption"><strong>Figure 15. 20 joints</strong></span>
+        </div>
+        <div class="subsubheader-text">5.4 Lower Body</div>
+        <div class="gallery-image-container half-width">
+          <img src="../assets/images/lower_body.png" class="gallery-image">
+          <span class="image-caption"><strong>Figure 16. lower body</strong></span>
+        </div>
+        <div class="subsubheader-text">5.5 Pose Estimation for animals</div>
+        <div class="gallery-image-container half-width">
+          <img src="../assets/images/animal_pe.png" class="gallery-image">
+          <span class="image-caption"><strong>Figure 17. PE for dog</strong></span>
+        </div>
+        <div class="subheader-text">6 Reference</div>
+        <div class="body-text">Newell, A., Yang, K., & Deng, J. (2016, July 26). Stacked Hourglass Networks for Human Pose Estimation. arXiv.org. https://arxiv.org/abs/1603.06937  </div>
+        <div class="body-text">Stathopoulos, A., Han, L., & Metaxas, D. (2024, March 14). Score-guided diffusion for 3D human recovery. arXiv.org. https://arxiv.org/abs/2403.09623 </div>
+        <div class="body-text">Loper, M., Mahmood, N., Romero, J., Pons-Moll, G., Black, M. J., (2015, October 26). SMPL: A skinned multi-person linear model: ACM Transactions on Graphics: VOL 34, no 6. ACM Transactions on Graphics. https://dl.acm.org/doi/10.1145/2816795.2818013 </div>
+        <div class="body-text">Cai, Z., Yin, W., Zeng, A., Wei, C., Sun, Q., Wang, Y., Pang, H. E., Mei, H., Zhang, M., Zhang, L., Loy, C. C., Yang, L., & Liu, Z. (2024, July 28). SMPLer-X: Scaling up expressive human pose and shape estimation. arXiv.org. https://arxiv.org/abs/2309.17448 </div>
+        <div class="body-text">Zhou, F., Yin, J., & Li, P. (2023, December 25). Lifting by image -- leveraging image cues for accurate 3D human pose estimation. arXiv.org. https://arxiv.org/abs/2312.15636  </div>
+        <div class="body-text">Pavlakos, G., Zhou, X., Derpanis, K. G., & Daniilidis, K. (2017, July 26). Coarse-to-fine volumetric prediction for single-image 3D human pose. arXiv.org. https://arxiv.org/abs/1611.07828  </div>
+        <div class="body-text">Kupyn, O., Martyniuk, T., Wu, J., & Wang, Z. (2019, August 10). DeblurGAN-V2: Deblurring (orders-of-magnitude) faster and better. arXiv.org. https://arxiv.org/abs/1908.03826 </div>
       </div>
       </div>
 

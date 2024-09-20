@@ -49,8 +49,8 @@
         
           (this should be the same across all pages)
         -->
-        <a class="button" href="mailto:zenanlicareer@gmail.com">
-          <span class="button-text">Contact Me</span>
+        <a class="button" href="../index.html">
+          <span class="button-text">Home Page</span>
         </a>
       </a>
     </div>
@@ -85,7 +85,7 @@
           <div class="body-text">Current research on motion generation primarily focuses on text-based prompts. However, this approach often faces challenges due to limited data availability. Additionally, it can be difficult for users to precisely describe desired motions in text. Leveraging advancements in multimodal models, we can now extract semantic meaning from videos and images more effectively. Our goal is to develop an end-to-end model that enables users to generate motions that align with their limitless imagination.</div>
         </div>
         <div class="subheader-text">2 Data Preparation</div>
-        <div class="body-text">Our advanced A3D product can generate motion data from videos, allowing us to create an unlimited number of video-motion paired datasets. Leveraging powerful multimodal large language models (MLLMs), such as VideoChat2, Gemini 1.5, and MPlug2, as well as models with text decoders like Valor, we can produce synthetic text-video-motion pairs. We use similarity metrics between text and video to select relatively "accurate" data. Additionally, our A3D pipeline incorporates multiple mechanisms to assess the quality of the generated motion data, enabling us to choose high-quality video-motion pairs. For more details, please refer to the #data_synthesis project.
+        <div class="body-text">Our advanced A3D product can generate motion data from videos, allowing us to create an unlimited number of video-motion paired datasets. Leveraging powerful multimodal large language models (MLLMs), such as VideoChat2, Gemini 1.5, and MPlug2, as well as models with text decoders like Valor, we can produce synthetic text-video-motion pairs. We use similarity metrics between text and video to select relatively "accurate" data. Additionally, our A3D pipeline incorporates multiple mechanisms to assess the quality of the generated motion data, enabling us to choose high-quality video-motion pairs. For more details, please refer to the <a href="./data-synthesis.html">#data_synthesis project.</a>
         </div>
         <div class="subheader-text">3 Encoder selection</div>
         <div class="body-text">Among the various video-text aligned multimodal models, we selected Valor and InternVideo as the encoders for our experiments.
@@ -139,14 +139,14 @@
         <div class="body-text">We train the motion transformer using different modality encoders and select the best-performing one.
         </div>
 
-        <div class="subheader-text">6 Metric</div>
+        <div class="subheader-text">6 Evaluation Metrics</div>
         <div class="body-text">We evaluate our model using a private test set to assess performance in our use cases. Table 1 compares the text-to-motion model, which was previously built and trained with synthetic data using only text-motion paired data, against the text-video-to-motion model trained with synthetic data utilizing both text and video modalities. The results demonstrate that incorporating visual prompts did not negatively impact performance with text prompts.</div>
         <img src="../assets/images/metric.svg" class="gallery-image">
         <span class="image-caption"><strong>Table 1</strong></span>  
         <div class="body-text">Table 2 indicates that the performance of our visual prompt is promising when compared to the text-to-motion performance.</div>
         <img src="../assets/images/metric_video.svg" class="gallery-image">
         <span class="image-caption"><strong>Table 2</strong></span> 
-        <div class="subheader-text">7 visualization results</div>
+        <div class="subheader-text">7 Visualization Results</div>
         <video class="img-fluid" autoplay controls muted>
           <source src="../assets/images/102411_result.mp4" type="video/mp4">
         </video>

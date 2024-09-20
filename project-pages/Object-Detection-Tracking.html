@@ -24,7 +24,7 @@
 
       This should be the same across all pages.
      -->
-     <title>T2M-model-improvements</title>
+     <title>Object Detection and Tracking</title>
     <meta name="description" content="A portfolio template for the Unemployables community.">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -53,8 +53,8 @@
         
           (this should be the same across all pages)
         -->
-        <a class="button" href="mailto:zenanlicareer@gmail.com">
-          <span class="button-text">Contact Me</span>
+        <a class="button" href="../index.html">
+          <span class="button-text">Home Page</span>
         </a>
       </a>
     </div>
@@ -71,9 +71,9 @@
             - Change the 'body-text' text to a short and sweet description of your project (maybe the same as the one on the project card)
             - Change "desktop.jpeg" to the image filename you uploaded in the assets/images folder.
           -->
-        <div class="main-title">T2M-model-improvements</div>
+        <div class="main-title">Object Detection and Tracking</div>
         <div class="body-text"></div>
-        <video class="project-header-image" src="../assets/images/saymotion_improvements.mp4" autoplay controls muted>
+        <video class="project-header-image" src="../assets/images/sam_reid.mp4" autoplay controls muted>
       </div>
 
       <!-- PROJECT DETAILS -->
@@ -85,61 +85,123 @@
       -->
       <div id="project-details">
         <div class="project-details-content">
-          <div class="body-text">*In this article, We will introduce the improvements I have leadingly tried on, FYI, they are not all the improvements we have done for the product.</div>
+        <div class="subheader-text">1 Object Detection</div>
+        <div class="gallery-image-container">
+        <img src="../assets/images/vGG.webp" class="gallery-image">
+        <span class="image-caption"><strong>Figure 1. SSD Structure</strong></span> 
         </div>
-        <div class="subheader-text">1 Temporal-Aware Text Encoder</div>
+        <div class="body-text">In our use cases, we only need to detect a single class of object—humans. Since humans typically appear in easily detectable areas, our detection task is straightforward and can be efficiently handled with a simple structure. To optimize processing time, we use VGG16 as the backbone for PC solutions and MobileNet for mobile solutions. Additionally, we employ six detection heads to capture humans at different scales.</div>
+        <div class="body-text">The main challenge in our detection task is use-case specific. For open source datasets, they contain one big bounding box for crowds of humans. and they do not address the detection of partially occluded individuals effectively. In general object detection, bounding boxes are tightly wrapped around objects to achieve higher mAP scores. However, this tight wrapping can miss extended limbs that fall outside the box. Consequently, a significant portion of our work focuses on data preprocessing to improve detection accuracy in these cases.</div>
         <div class="gallery-image-container half-width">
-        <img src="../assets/images/sequential-aware.png" class="gallery-image">
+        <img src="../assets/images/crowd_example_coco.png" class="gallery-image">
+        <span class="image-caption"><strong>Figure 1. crowd annotation example in COCO</strong></span>
+      </div> 
+        <img src="../assets/images/OD_artifacts.png" class="gallery-image">
+        <span class="image-caption"><strong>Figure 2. artifact cases in general object detection models</strong></span>
+        <div class="body-text">Based on the issues we identified, we have implemented the following solutions:
+          <ol>
+            <li>Partial Human Body Training: We randomly crop or mask out image areas based on the person ground truth bounding box locations to focus only on partial human bodies during training.</li>
+            <li>Bounding Box Validation: We use Top-Down pose estimation solutions, such as OpenPose, to establish new bounding boxes. These are then compared with the ground truth bounding boxes. If their IoU is below a certain threshold, we mark these as problematic ground truth labels and exclude them.</li>
+            <li>Crowd Label Filtering: While the COCO dataset includes an iscrowd label for filtering crowd labels, some datasets lack this metadata. During preprocessing, we filter out bounding boxes where more than one person’s bounding box is contained within the current bounding box.</li>
+          </ol>
+        </div> 
+        <div class="body-text">After data preprocessing, we trained our VGG-based model and MobileNet-based model with the filtered dataset. We observed the following improvements:</div>
+        <img src="../assets/images/OD_improvments.png" class="gallery-image">
+        <span class="image-caption"><strong>Figure 3. Improvements after data preprocessing</strong></span>
+        <div class="body-text">For Table 1 results, We tested only with the "person" label and set the IoU threshold to 0.85.</div>
+        <img src="../assets/images/Detection_metric.svg" class="gallery-image">
+        <span class="image-caption"><strong>Table 1. </strong></span>
+        
+        
+        <div class="subheader-text">3 Object Tracking V1.0 -- OD+ReID</div> 
+        <div class="body-text">In our cases, multi-person tracking presents two main challenges:
+          <ol>
+            <li>Trajectory Variability: Unlike general object tracking, where objects usually move in a consistent direction, our use cases involve a lot of dancing, where dancers frequently switch places and follow unstable trajectories.</li>
+            <li>Visual Similarity: Tracking multiple objects of the same type is challenging, especially in dancing videos where individuals may look alike or wear similar uniforms.</li>
+          </ol>
+          Additionally, data scarcity has been a significant issue, as open-source datasets were quite limited when we began this project in 2021 (e.g., DanceMOT 2022, SportMOT 2023).
         </div>
-        <div class="body-text">in most of the state-of-art models, people used clip's text encoder as the frozen pre-trained text indicator. like MDM, MLM, MoMask, T2M-GPT, etc. the biggest problem of clip's text encoder is in order to aligning text and visual embeeding space, they demaged the sequential information in the global token by emphasized spatio relation information. Images are only containing spatio relation information. </div>
-        <div class="body-text">and motion is sequential intense information. it causes a problem that sometime a description contains multiple actions like "a man doing a cartwheel and run away", the model failed to produce the run away part. or in some cases, the model will reverse the action order. by run first then do a cartwheel.</div> 
-        <div class="body-text">in order to ease such issue. we have tried to replace it with a more powerful text intrepretor like MPNet and also experiment on using full token sequence via cross-attention layer.</div>
-        <div class="body-text">after doing so, we can obtain improvements as below</div>
-        <video class="img-fluid" autoplay controls muted>
-          <source src="../assets/images/temporal-aware.mp4" type="video/mp4">
-        </video>
-
-        <div class="subheader-text">3 LLM+RAG for prompt optimization</div>
-        <img src="../assets/images/LLM+RAG-prompt-optimizer.svg" class="gallery-image">
-        <div class="body-text">in product, users' input is unpredictable. you cannot require users to provide a informative and well organized in detail prompt with no typos. we have pull out some user prompts and analyze the differences between real-world user prompt and ground truth prompts we used to train our model. table 1 showing some examples of the user prompts. </div>
-        <div class="body-text">in order to fix such problem, we leverage the power of LLM model, We firstly ask LLM to fix all the typos and translate them to English. Then we use MPNet to convert user prompt to embedding space. and search our vectorDB to find the closest prompt in training data. the vectorDB stored all our vectorized training prompts</div>
-        <div class="body-text">We are not trying to make it as a retrieval-like function, so after find the closest prompt we are not replacing it directly. we use it as information to ask LLM rewrite the user's prompt follwoing the same style as the given sentence but the actions need to match the user's given prompt.</div>
-        <div class="body-text">after doing so, we can obtain improvements as below</div>
-        <video class="img-fluid" autoplay controls muted>
-          <source src="../assets/images/LLM+RAG.mp4" type="video/mp4">
-        </video>
-
-        <div class="subheader-text">4 RAG during motion Inference</div>
-        <img src="../assets/images/motionRAG_stucture.svg" class="gallery-image">
-        <span class="image-caption"><strong>Figure 1</strong></span> 
-          <div class="body-text">for a few cases, our model would not understand the prompt action and output not semantically matching motions. in order to reduce such cases happen, we can apply RAG to retrieve a segment of motion as hint for motion generator to generate motion along with that</div>
-          <div class="body-text">there are couple combination we need to test for RAG-guided generation. 1.which model we use to do motion retrieval 2.whether we treat the retrieved tokens replacable 3.how should we insert those retrieved tokens</div>
-          <div class="body-text">for these questions, we designed our experiments as following: for 1, compare the peformance of using MPNet text-to-text similarity matrix to obtain motion sequence in database, in the other hand, we use tmr's text-to-motion similarity matrix to retrieve motion seuqnece. for 2, make mask matrix accordingly to perform replacable and not replacble and compare their performance. for 3, we make it segment smapling, and interval insert sampling. and use transformed similarity score as the sampling ratio to decide retrieval length.</div>
-          <div>
-            \[ y = \frac{1}{1 + e^{-k(x - 0.5)}} \]
+        <div class="body-text">Our initial approach involved using object detection combined with re-identification to address the task. </div>
+        <img src="../assets/images/reid_pipeline.png" class="gallery-image">
+        <span class="image-caption"><strong>Fugure 4. MP V1.0 pipeline</strong></span>
+        <div class="body-text">As illustrated in the flowchart above, our pipeline consists of four major steps:
+        <ol>
+          <li>Object Detection</li>
+          <li>Re-Identification</li>
+          <li>New Features Fusion (based on the results of Steps 1 and 2)</li>
+          <li>Track Status Update</li>
+        </ol>   
+        </div>
+        <div class="subsubheader-text">3.1 Re-Identification</div> 
+        <div class="body-text">We use ResNeXt50 as the backbone for our model. Additionally, we incorporated self-attention layers within the ResNeXt architecture to enhance accuracy, as appearance information should be considered in a global context. The structure is depicted in Figure 5.</div>
+        <div class="body-text">fFor the loss function, we use a combination of CrossEntropyLoss, WeightedTripletLoss, and CenterLoss to train our model. Our training datasets include CUHK02, DukeMTMC-VID, iLIDS-VID, LPW, Market1501, MARS, MOT15, MOT17-20, and PRID2011.</div>
+        <div class="body-text">WeightedTripletLoss emphasizes more on difficult or incorrect predictions, while CenterLoss helps to compact the embedding space for the same class. TripletLoss ensures that embeddings for different classes are pushed further apart.</div>
+        <img src="../assets/images/ReID.svg" class="gallery-image">
+        <span class="image-caption"><strong>Fugure 5. Re-ID Structure</strong></span>
+        <div class="gallery-image-container half-width">
+        <img src="../assets/images/self-attention-CNN.svg" class="gallery-image">
+        <span class="image-caption"><strong>Fugure 6. The self-attention block in the CNN model</strong></span>
+      </div>
+        <div class="subsubheader-text">3.2 Feature Fusion</div> 
+        <div class="body-text">We combine two similarity scores: the Intersection over Union (IoU) score and the appearance embedding similarity score, as depicted in Figure 4.</div>
+          <div class="subsubheader-text">3.3 Tracks Statue Update Logics</div> 
+          <div class="body-text">Here are the steps for track updating after we obtain the fused similarity score:
+            <ol>
+              <li>Assign New Bounding Boxes: Use Non-Maximum Suppression (NMS) and a pre-set threshold to assign new bounding boxes and appearance embeddings to existing active tracks.</li>
+              <li>Update Track Status: Keep the active status of tracks that have been updated and change the status of tracks that did not get updated to inactive.</li>
+              <li>Handle Unassigned Bounding Boxes: For bounding boxes that remain unassigned, apply NMS and thresholding to inactive tracks. Any updated inactive tracks will be moved back to the active pool.</li>
+              <li>Create New Tracks: For any remaining unassigned bounding boxes, create new tracks to store them. This logic also applies to the first frame.</li>
+              <li>Postprocessing (Offline Scenarios): In offline scenarios, perform additional postprocessing to delete tracks that appear for only a few frames. Additionally, check for potential track merges based on criteria such as non-overlapping frames and high similarity scores.</li>
+            </ol>
           </div>
-          <div class="body-text">where \(k\) is constant, \(x\) is similarity score where range is \( [0, 1] \). \(e\) is the base of the natural logarithm</div>
-          <div class="body-text">its graph looks like below</div>
-          <div class="center-gallery-image-container center-half-width" >
-          <img src="../assets/images/scoring-graph.png" class="gallery-image">
-          </div>
-          <div class="body-text">We picked the winner of all combination and display its improvement results below.</div>
+          <div class="gallery-image-container half-width">
+          <img src="../assets/images/Track_object.svg" class="gallery-image">
+          <span class="image-caption"><strong>Fugure 7. Track Object and its attributes</strong></span>
+        </div>
+          <img src="../assets/images/reid_postprocessing.svg" class="gallery-image">
+          <span class="image-caption"><strong>Fugure 8. offline postprocessing pipeline</strong></span>
+          <div class="subsubheader-text">3.4 Result</div>
           <video class="img-fluid" autoplay controls muted>
-            <source src="../assets/images/motionRAG1.mp4" type="video/mp4">
-          </video>
+          <source src="../assets/images/ReID_result.mp4" type="video/mp4">
+        </video>
+        <div class="subsubheader-text">3.5 Comparison with Baselines</div>
+        <div class="body-text">We evaluated several baseline solutions before developing our own Re-ID model, including CLIP and FaceNet. As shown in the results below, both of these solutions exhibited a significant number of ID switching instances.</div>
+        <video class="img-fluid" autoplay controls muted>
+          <source src="../assets/images/face_reid.mp4" type="video/mp4">
+        </video>
+        <span class="image-caption"><strong>FaceNet result</strong></span> 
+        <video class="img-fluid" autoplay controls muted>
+          <source src="../assets/images/CLIP_reid_result.mp4" type="video/mp4">
+        </video>
+        <span class="image-caption"><strong>CLIP result</strong></span> 
+
+        <div class="subheader-text">4 Object Tracking V2.0 -- Segment Anything+Mask Predictor</div> 
+        <img src="../assets/images/SAM_tracking.png" class="gallery-image">
+        <span class="image-caption"><strong>Figure 9. MP V2.0 Pipeline</strong></span> 
+          <div class="body-text">Temporal segmentation is a well-studied area, but it faces a significant challenge: the mask often deforms and fails to cover the object completely over time. This issue typically results in either the mask vanishing or expanding excessively, leading to a long-tail problem. </div>
+          <div class="body-text">SAM is ideal for addressing this issue through mask refinement. Additionally, we have pose estimation (PE) keypoint results that can be utilized by SAM to generate more accurate masks.</div>
+          <div class="body-text">We use PE results to generate initial masks for the first frame with SAM, assigning IDs to each mask. For the second frame, we input the image and the previous masks generated by SAM into the Mask Predictor to generate the current masks. For subsequent frames, we continue using the Mask Predictor with the new image and predicted masks to generate updated masks. This process is repeated to produce masks for each ID across frames. To address mask drift, SAM refinement is applied, but to expedite processing, this refinement is performed every 
+            𝑁
+            frames rather than every frame.</div>
+          <div class="body-text">Segment tracking offers significant advantages in our use cases. For instance, in wrestling, where two individuals are highly entangled, a bounding box-based solution would face challenges. The overlapping bounding boxes would result in high Intersection over Union (IoU) scores and similarly high appearance embedding scores due to the significant overlap. Segment tracking inherently avoids this issue by providing more precise delineation of each individual, even in complex overlapping scenarios. </div>
+          <img src="../assets/images/segmentation_advantages.svg" class="gallery-image">
+          <span class="image-caption"><strong>Figure 10. Bounding boxes Versus Segmentations</strong></span> 
+          <div class="body-text">In our example video, MP V1.0 encountered one ID-swapping issue, which was effectively resolved by MP V2.0. Additionally, we observed improvements in handling several challenging scenarios.</div>
+          <img src="../assets/images/ID_swapped.svg" class="gallery-image">
+          <span class="image-caption"><strong>Figure 11. MP V1.0 ID-swapping case</strong></span> 
           <video class="img-fluid" autoplay controls muted>
-            <source src="../assets/images/motionRAG2.mp4" type="video/mp4">
+            <source src="../assets/images/sam_reid.mp4" type="video/mp4">
           </video>
+          <span class="image-caption"><strong>MP V2.0 result</strong></span>
           
-          <div class="subheader-text">5 Using beam search on Motion Variant Generation</div>
-          <div class="body-text">in product, we provide variant motion generation results, we apply beam search to provide partial variants.</div>
-          
-        <div class="subheader-text">9 Reference</div>
-        <div class="body-text">Team, G., Georgiev, P., Lei, V. I., Burnell, R., Bai, L., Gulati, A., Tanzer, G., Vincent, D., Pan, Z., Wang, S., Mariooryad, S., Ding, Y., Geng, X., Alcober, F., Frostig, R., Omernick, M., Walker, L., Paduraru, C., Sorokin, C., … Vinyals, O. (2024, August 8). Gemini 1.5: Unlocking multimodal understanding across millions of tokens of context. arXiv.org. https://arxiv.org/abs/2403.05530 </div>
-        <div class="body-text">Guo, C., Mu, Y., Javed, M. G., Wang, S., & Cheng, L. (2023, November 29). Momask: Generative masked modeling of 3D human motions. arXiv.org. https://arxiv.org/abs/2312.00063 </div>
-        <div class="body-text">Zhang, J., Zhang, Y., Cun, X., Huang, S., Zhang, Y., Zhao, H., Lu, H., & Shen, X. (2023, September 24). T2M-GPT: Generating human motion from textual descriptions with discrete representations. arXiv.org. https://arxiv.org/abs/2301.06052 </div>
-        <div class="body-text">Song, K., Tan, X., Qin, T., Lu, J., & Liu, T.-Y. (2020, November 2). MPNet: Masked and permuted pre-training for Language Understanding. arXiv.org. https://arxiv.org/abs/2004.09297 </div>
-        <div class="body-text">Petrovich, M., Black, M. J., & Varol, G. (2023, August 25). TMR: Text-to-motion retrieval using contrastive 3D human motion synthesis. arXiv.org. https://arxiv.org/abs/2305.00976 </div>
+        <div class="subheader-text">5 Reference</div>
+        <div class="body-text">Kirillov, A., Mintun, E., Ravi, N., Mao, H., Rolland, C., Gustafson, L., Xiao, T., Whitehead, S., Berg, A. C., Lo, W.-Y., Dollár, P., & Girshick, R. (2023a, April 5). Segment anything. arXiv.org. https://arxiv.org/abs/2304.02643 </div>
+        <div class="body-text">Xie, S., Girshick, R., Dollár, P., Tu, Z., & He, K. (2017, April 11). Aggregated residual transformations for deep neural networks. arXiv.org. https://arxiv.org/abs/1611.05431 </div>
+        <div class="body-text">Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, L., & Polosukhin, I. (2023, August 2). Attention is all you need. arXiv.org. https://arxiv.org/abs/1706.03762 </div>
+        <div class="body-text">Liu, W., Anguelov, D., Erhan, D., Szegedy, C., Reed, S., Fu, C.-Y., & Berg, A. C. (2016, December 29). SSD: Single shot multibox detector. arXiv.org. https://arxiv.org/abs/1512.02325 </div>
+        <div class="body-text">Lin, T.-Y., Maire, M., Belongie, S., Bourdev, L., Girshick, R., Hays, J., Perona, P., Ramanan, D., Zitnick, C. L., & Dollár, P. (2015, February 21). Microsoft Coco: Common Objects in Context. arXiv.org. https://arxiv.org/abs/1405.0312 </div>
+        <div class="body-text">Held, D., Thrun, S., & Savarese, S. (2016, August 16). Learning to track at 100 fps with deep regression networks. arXiv.org. https://arxiv.org/abs/1604.01802 </div>
+        <div class="body-text">Bergmann, P., Meinhardt, T., & Leal-Taixe, L. (2019, August 17). Tracking without bells and whistles. arXiv.org. https://arxiv.org/abs/1903.05625 </div>
       </div>
       </div>
 

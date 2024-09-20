@@ -50,8 +50,8 @@
         
           (this should be the same across all pages)
         -->
-        <a class="button" href="mailto:zenanlicareer@gmail.com">
-          <span class="button-text">Contact Me</span>
+        <a class="button" href="../index.html">
+          <span class="button-text">Home Page</span>
         </a>
       </a>
     </div>
@@ -83,21 +83,17 @@
       <div id="project-details">
         <div class="subheader-text">1 Introduction</div>
         <div class="project-details-content">
-          <div class="body-text">One of the biggest challenges in human motion generation domain is the shortage of data. 
-            the current biggest text-motion dataset in research field HML3D only contain 14,616 motion clips and 44,970 descriptions composed by 5,371 distinct words, even though doubled by mirroring motion for data augmentation, but the effect of increasing diversity is very little. 
-            such small dataset is causing overfitting in general motion generation models. Relying on Animate 3D product, we can generate high quality motion data. 
-            benefited of the thrilling in LLM area and MLLM area. We are able to establish a massive and diversified synthetic dataset for text to motion generation task. we built a private owned dataset with over 344,476 motion clips with 344,476 descriptions composed by 12,139 distinct words</div>
+          <div class="body-text">One of the biggest challenges in the human motion generation domain is the shortage of data. The largest text-to-motion dataset in the research field, HML3D, contains only <i>14,616</i> motion clips and <i>44,970</i> descriptions using <i>5,371</i> distinct words. Even with data augmentation techniques, such as mirroring motions, the increase in diversity is minimal. This small dataset often leads to overfitting in general motion generation models. Leveraging our Animate 3D product, we can generate high-quality motion data. Thanks to advancements in large language models (LLMs) and multimodal LLMs (MLLMs), we are now able to create a massive and diverse synthetic dataset for text-to-motion generation tasks. Our privately owned dataset contains over <strong><i>344,476</i></strong> motion clips and descriptions, utilizing <strong><i>12,139</i></strong> distinct words.</div>
         </div>
         <div class="subheader-text">2 Data Analysis for HumanML3D dataset</div>
         <div class="subsubheader-text">2.1 Similarity Test
         </div>
-        <div class="body-text">shown in Table 1, inspired by Text-Motion-Retrieval(TMR), we use MPNet to calculate the text description similarity between training data and test data. If we could find a text in training data is having a similarity score higher than 90% or 95%, we believe it means a very similar semantic motion has been used to train the model. as Table 1 showing,
-           such high text similarity between training set and test set can potentially cause the model overfitting in real-world cases.</div>
-           <img src="../assets/images/dataset_comparison.svg" class="gallery-image">
+        <div class="body-text">As shown in Table 1, inspired by Text-Motion-Retrieval (TMR), we use MPNet to calculate the text description similarity between the training and test data. If a text in the training data has a similarity score of 90% or 95% or higher, we consider this an indication that a very similar semantic motion was used to train the model. As depicted in Table 1, such high text similarity between the training and test sets can potentially lead to overfitting, particularly in real-world scenarios.</div>
+           <img src="../assets/images/HML3D_Comparison.svg" class="gallery-image">
            <span class="image-caption"><strong>Table 1</strong></span> 
            <div class="subsubheader-text">2.2 Action Distribution
           </div>
-          <div class="body-text">We are using the POS key in HML3D ground truth data to visualize the action classes in HML3D dataset. for better visualization we only show top 30 classes in bar chart and top 50 in pie chart. the Fig 1&2 showing the action distribution in HML3D.</div>
+          <div class="body-text">We utilize the Part-of-Speech(POS) key from the HML3D ground truth data to visualize the action classes in the HML3D dataset. For improved clarity, we display only the top 30 classes in a bar chart and the top 50 in a pie chart. Figures 1 and 2 illustrate the action distribution in HumanML3D.</div>
           <div class="project-gallery-content">
           <div class="gallery-image-container half-width">
             <img src="../assets/images/HML3D_bar.png" class="gallery-image">
@@ -111,29 +107,22 @@
           </div>
            <div class="subheader-text">3 Data Preparation for DM dataset</div>
           <div class="subsubheader-text">3.1 Video-Motion data creation</div>
-        <div class="body-text">*Our data is collected from A3D users who volunterly grant us permission to use their data to improve our services' quality
+        <div class="body-text">*Our data is collected from A3D users who have voluntarily granted us permission to use their data to enhance the quality of our services.
         </div>
-        <div class="body-text">Inside our Animate 3D pipeline, We have applied multiple self-evaluation methods. namely they are pose realistic discriminator,
-           high-pass score of joint change in time series. We set a threshold to keep action's diversity at the same time ensure the motion quality
-          Since our A3D pipeline also support upper body mode(more focus on facial and fingers tracking), and Multi-person mode. We need to fliter out those type of samples via database first.
-        After this, we obtained a relatively high quality Video-Motion dataset</div>
+        <div class="body-text">Within our Animate 3D pipeline, we apply multiple self-evaluation methods, including a pose realism discriminator and a high-pass score for joint movement changes over time. We set thresholds to maintain action diversity while ensuring motion quality. Since our A3D pipeline also supports upper-body mode (with a focus on facial and finger tracking) and multi-person mode, we first filter out these specific samples from the dataset. After this process, we obtain a relatively high-quality video-motion dataset.</div>
         <div class="subsubheader-text">3.2 Video-Text data creation</div>
-        <div class="body-text">We experiment multiple MLLM/Multimodal model options, they are namely Gemini1.5, VideoChat2, Mplug2, Valor. additionally, 
-          we have tried different hyper-parameters tuning and prompt engineering to create various output 
-          from each model. We used Internvideo to calculate their video-to-text retrieval Top1 recall score.
-           We also do Quantitative evaluation of user preference. Figure 3 is showing an example of our 
-           survey, and Table 2 shown best video-to-text retrieval top1 recall score for each model. We received 17 users' feedback on the survey</div>
+        <div class="body-text">We experimented with several MLLM/multimodal models, including Gemini 1.5, VideoChat2, MPlug2, and Valor. Additionally, we explored various hyperparameter tuning strategies and prompt engineering techniques to generate diverse outputs from each model. InternVideo was used to calculate the video-to-text retrieval Top-1 recall score for each model. We also conducted a quantitative evaluation based on user preferences. Figure 3 provides an example of our survey, and Table 2 presents the best video-to-text retrieval Top-1 recall scores for each model. Feedback from 17 users was collected through the survey is shown in Table 3.</div>
            <img style="height:300px;" src="../assets/images/MLLM_R1.svg" class="gallery-image">
            <span class="image-caption"><strong>Table 2</strong></span> 
            <img src="../assets/images/survey_example.png" class="gallery-image">
-           <span class="image-caption"><strong>Figure 3</strong></span> 
+           <span class="image-caption"><strong>Figure 3. User Preference Survey Example Question</strong></span> 
            <img style="height:300px;" src="../assets/images/MLLM_user_preference.svg" class="gallery-image">
-           <span class="image-caption"><strong>Table 3</strong></span> 
-           <div class="body-text">as we can see, gemini 1.5 is the clear winner, so we decided to use it to generate our video-text data</div>
+           <span class="image-caption"><strong>Table 3. User Preference Results</strong></span> 
+           <div class="body-text">As shown, Gemini 1.5 emerged as the clear winner, which led us to choose it for generating our video-text data.</div>
         <div class="subheader-text">4 Data Analysis for DM dataset</div>
         <div class="subsubheader-text">4.1 Action Keyword Distribution</div>
 
-        <div class="body-text">We applied POS algorithm on generated texts and analze its distribution. as shown in Figure 4&5, we noticed the biggest difference between HML3D and our dataset is our top1 action class is Dance.
+        <div class="body-text">We applied the POS algorithm to the generated texts and analyzed their distribution. As shown in Figures 4 and 5, the most significant difference between the HumanML3D dataset and ours is that the top action class in our dataset is <i>Dance</i>, while HumanML3D is <i>Walk</i>.
         </div>
         <div class="project-gallery-content">
           <div class="gallery-image-container half-width">
@@ -146,14 +135,11 @@
            </div>
           </div>
            <div class="subsubheader-text">4.2 Action embedding Distribution</div>
-        <div class="body-text">We want to have a deep insight of the relation between embedding distribution and keyword distribution.
-          firstly, we are using TMR to convert motion and text into embedding space. after applying PCA algorithm, we visualize the 
-          relationship between text embeddings and visual embeddings. to seeing the modality gap(alignment)
-           condition for well-trained TMR model. We realized there are some modality gap between Text Embeddings and Motion Embeddings.
+        <div class="body-text">We aim to gain a deeper understanding of the relationship between embedding distributions and keyword distributions. First, we use TMR to convert motion and text into embedding space. After applying Principal component analysis(PCA), we visualize the relationship between text embeddings and visual embeddings to examine the modality alignment in a well-trained TMR model. We observed that there is a noticeable modality gap between text embeddings and motion embeddings.
         </div>
         <img style="height:400px; width:550px;" src="../assets/images/text_motion_embeddings.png" class="gallery-image">
            <span class="image-caption"><strong>Figure 5</strong></span> 
-           <div class="body-text">We also visualize 4 keyword classes' distribution in text and motion embedding spaces. Since the data point are transformed and reduced to 2-D space, we believe their distribution would be more distinguishable in original dimension space.</div>
+           <div class="body-text">We also visualize the distribution of four keyword classes in both text and motion embedding spaces. Since the data points are transformed and reduced to 2D space, we believe that their distribution would be more distinguishable in the original dimensional space.</div>
            <div class="project-gallery-content">
             <div class="gallery-image-container half-width">
            <img src="../assets/images/POS_motion_embeddings.png" class="gallery-image">
@@ -165,49 +151,32 @@
           </div>
           </div>
            <div class="subsubheader-text">4.3 Text and Motion metric insight</div>
-           <div class="body-text">We also test the TMR text-motion retrieval and motion-text retrieval performance in our dataset</div>
+           <div class="body-text">We evaluated the performance of TMR for text-to-motion and motion-to-text retrieval on our dataset. The results fall within the expected range, which supports the effectiveness of our synthetic dataset.</div>
            <img src="../assets/images/TMR-M2T.svg" class="gallery-image">
            <span class="image-caption"><strong>Table 3.Motion-Text Retrieval</strong></span>
            <img src="../assets/images/TMR-T2M.svg" class="gallery-image">
            <span class="image-caption"><strong>Table 4.Text-Motion Retrieval</strong></span>
            <div class="subheader-text">5 Clustering</div>
         <div class="body-text">
-          after we collected all insightful analyzed information of this dataset, we made sure that all metrics are in the normal range, further more, based on the above results, we know that
-          our data is not equally distributed, it is potential the harm the model's performance if some types of motion are dominating the dataset.
-          in order to ease the bias of the dataset. we decided to do clustering to group similar type of action together. so that during training, we can set different sampling rate in different datasets.
+          we identified that the data is not equally distributed. This imbalance could potentially harm the model’s performance if certain types of motions dominate the dataset. To address this bias, we decided to perform clustering to group similar types of actions together. This approach allows us to set different sampling rates for different clusters during training, mitigating the impact of dataset imbalance.
           </div>
-          <div class="body-text">in order to do so, we first applied DBSCAN and K-means for clustering. according to the result, K-means performs a better result so we used k-means for our first iteration of clustering job.</div>
-          <div class="body-text">because of the characteristics of k-means, more centroids are clustered in the dense area to make sure each cluster maintain similar amount of datapoint, which means, for each cluster, their average distance to centroid can be various. what want our final result to be various and each class is more representative. in order to do so, we utilized hierarchical clustering to achieve an unbalanced clustering result, aiming to group repeated actions together
-            
-            matching the imbalance in the a3d dataset. Initially, we avoided
-            hierarchical clustering due to its computational expense and time
-            
-            consumption. With a total of 380K data points, hierarchical clustering necessitates computing an n × n distance matrix for each added
-            
-            layer, which is impractical directly. Therefore, we performed hierarchical clustering only on the centroids obtained from k-means to
-            
-            significantly reduce computation time.
-            
-            We fine-tuned the threshold to derive a final set of 12 clusters, en-
-            suring each cluster’s semantic coherence while meeting the specified
-            
-            requirements.</div>
-            <div class="body-text">we need to test if text embedding or motion embedding can provide a better clustering results.In fig. 9, we present two examples of motion clustering results and
-              text clustering results. In this example, the motion clustering focuses
-              more on lower-level semantic motions such as "raise hands in front
-              of chest and walk," which encompasses multiple actions with similar
-              textual meanings like "zombie walk," "dumbbell lift walking," "both
-              hands shooting," etc.
-              
-              On the other hand, the text clustering results provide di-
-              verse movements that share the same textual meaning, as
-              shown in fig. 10. with the example of "sword fight."</div>
+          <div class="body-text">To achieve this, we first applied DBSCAN and K-means clustering algorithms. Based on the results, K-means yielded better performance, so we used K-means for the initial step of our clustering process.</div>
+          <div class="body-text">Due to the characteristics of K-means, more centroids are clustered in denser areas to ensure that each cluster maintains a similar number of data points. This results in varying average distances from the centroid for each cluster. To achieve a more varied and representative final result, where each class is more distinct, we used hierarchical clustering to obtain an unbalanced clustering outcome. This approach helps group similar or repeated actions together more effectively.
+            </div>
+            <div class="body-text">
+              To address the imbalance in the A3D dataset, we initially avoided hierarchical clustering due to its high computational expense and time consumption. With a total of 380,000 data points, hierarchical clustering requires computing an 
+              𝑛
+              ×
+              𝑛
+              distance matrix for each layer, which is impractical. Instead, we applied hierarchical clustering only to the centroids obtained from K-means, significantly reducing computation time. We fine-tuned the threshold to generate a final set of 12 clusters, ensuring that each cluster maintains semantic coherence while meeting the specified requirements.</div>
+            <div class="body-text">We need to evaluate whether text embeddings or motion embeddings provide better clustering results. Figure 9 presents examples of clustering results for both motion and text embeddings. In these examples, motion clustering tends to focus on lower-level semantic motions, such as "raising hands in front of the chest and walking," which includes various actions with similar textual meanings like "zombie walk," "dumbbell lift walking," and "both hands shooting."</div>
+
+              <div class="body-text">Conversely, text clustering results, as shown in Figure 10 with the example of "sword fight," reveal a broader range of movements that share the same textual meaning.</div>
               <img src="../assets/images/zombie_walk.png" class="gallery-image">
            <span class="image-caption"><strong>Figure 9. clustering based on motion embeddings</strong></span>
            <img src="../assets/images/sword_fight.png" class="gallery-image">
            <span class="image-caption"><strong>Figure 10. clustering based on text embeddings</strong></span>
-        <div class="body-text">Eventually, we picked text embedding to do clustering. fig. 11 displays the centroids of these 12 clusters across the entire
-          sample space. and Fig 12 reveal the data size of each cluster</div>
+        <div class="body-text">Ultimately, we chose text embeddings for clustering. Figure 11 displays the centroids of the 12 clusters across the entire sample space, while Figure 12 shows the data size for each cluster.</div>
           <div class="project-gallery-content">
             <div class="gallery-image-container half-width">
           <img src="../assets/images/hierarchical_centroids_in_all_samples.png" class="gallery-image">
@@ -218,13 +187,12 @@
            <span class="image-caption"><strong>Figure 12</strong></span>
           </div>
           </div>
-        <div class="subheader-text">6 Metric</div>
-        <div class="body-text">We evaluate our model using a private test set to assess performance in our use cases. Table 1 compares the text-to-motion model, which was previously built and trained with synthetic data using only text-motion paired data, against the text-video-to-motion model trained with synthetic data utilizing both text and video modalities. The results demonstrate that incorporating visual prompts did not negatively impact performance with text prompts.</div>
+        <div class="subheader-text">6 Evaluation Metrics</div>
         <img src="../assets/images/metric_data_synthesis.svg" class="gallery-image">
         <span class="image-caption"><strong>Table 5</strong></span>  
-        <div class="body-text">We tested our model on HML3D testset to have a clearer comparison, as we can see, by adding DM dataset, it increased model's performance.</div>
-        <div class="body-text">It is worth to mention that we are replacing the text-encoder and motion-encoder in the original T2M paper by TMR for a priciser evaluation. so the number above not in the same range as the state-of-art models' papers</div>
-        <div class="subheader-text">7 visualization results</div>
+        <div class="body-text">We tested our model on the HML3D test set for a clearer comparison. The results show that incorporating the DM dataset can futher improve the model's performance in HumanML3D dataset.</div>
+        <div class="body-text">It is important to note that we replaced the text encoder and motion encoder in the original T2M paper with TMR for a more precise evaluation. As a result, the numbers reported are not directly comparable to those in state-of-the-art models' papers.</div>
+        <div class="subheader-text">7 Visualization Results</div>
         <video class="img-fluid" autoplay controls muted>
           <source src="../assets/images/data_synthesis_comparison1.mp4" type="video/mp4">
         </video>
@@ -233,7 +201,7 @@
         </video>
         
         <div class="subheader-text">8 Conclusion</div>
-        <div class="body-text">by using MLLM-guided synthetic data, group data based on semantic meaning and applying weigted sampling ratio can help boost the motion generation accuracy.</div>
+        <div class="body-text">Using MLLM-guided synthetic data, grouping data based on semantic meaning, and applying a weighted sampling ratio can significantly enhance motion generation accuracy.</div>
         
         <div class="subheader-text">9 Reference</div>
         <div class="body-text">Chen, S., He, X., Guo, L., Zhu, X., Wang, W., Tang, J., & Liu, J. (2023, April 17). Valor: Vision-audio-language omni-perception pretraining model and dataset. arXiv.org. https://arxiv.org/abs/2304.08345 </div>
